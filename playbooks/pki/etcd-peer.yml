@@ -1,0 +1,18 @@
+- name: Set default values
+  hosts: localhost
+  roles:
+    - default_fact
+
+- name: Generate certificate for etcd peer
+  hosts: localhost
+  roles:
+    - signed-certificate
+  vars:
+    ansible_connection: local
+    ca: "{{ etcd_ca_crt }}"
+    ca_key: "{{ etcd_ca_key }}"
+    cert_key: "{{ apiserver_cert_key }}"
+    cert_csr: "{{ etcd_peer_cert_crt }}"
+    cert: "{{ etcd_peer_cert_crt }}"
+    cn: kube-etcd-per
+    san: "{{ hostname }},{{ hostIP }},localhost,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local"

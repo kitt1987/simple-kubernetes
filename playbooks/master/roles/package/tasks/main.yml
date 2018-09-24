@@ -1,0 +1,28 @@
+- name: Complete empty variables
+  set_fact:
+    app_path: .
+  when: app_path not defined
+
+- name: Complete empty variables
+  set_fact:
+    remote_app_path: .
+  when: remote_app_path not defined
+
+- name: Replicate apps
+  copy:
+    src: "{{ app_path }}"
+    dest: "{{ remote_app_path }}"
+
+- name: Extract server tarball
+  shell: |
+    tar zxf kubernetes-server-linux-amd64.tar.gz
+    tar zxf kube-dns.tar.gz
+    pushd kubernetes/server/bin > /dev/null
+    for tar in *.tar; do
+      docker load -i ${tar}
+    done
+    cp kubeadm kubectl kubelet /usr/local/bin
+    popd > /dev/null
+    rm -rf kubernetes-server-linux-amd64.tar.gz kube-dns.tar.gz kubernetes
+  args:
+    chdir: "{{ remote_app_path }}"

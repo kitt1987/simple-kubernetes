@@ -1,0 +1,2 @@
+- import_playbook: master/main.yml
+- import_playbook: node/main.yml

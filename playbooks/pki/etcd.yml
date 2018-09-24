@@ -1,0 +1,78 @@
+- name: Set default values
+  hosts: localhost
+  roles:
+    - default_fact
+
+- name: CA for kubernetes
+  hosts: localhost
+  roles:
+    - ca
+  vars:
+    ansible_connection: local
+    ca_key: "{{ kube_ca_key }}"
+    ca_csr: "{{ kube_ca_csr }}"
+    ca: "{{ kube_ca_crt }}"
+    cn: kubernetes-ca
+
+- name: CA for etcd
+  hosts: localhost
+  roles:
+    - ca
+  vars:
+    ansible_connection: local
+    ca_key: "{{ etcd_ca_key }}"
+    ca_csr: "{{ etcd_ca_csr }}"
+    ca: "{{ etcd_ca_crt }}"
+    cn: etcd-ca
+
+- name: CA for kubernetes front proxy
+  hosts: localhost
+  roles:
+    - ca
+  vars:
+    ansible_connection: local
+    ca_key: "{{ kube_front_proxy_ca_key }}"
+    ca_csr: "{{ kube_front_proxy_ca_csr }}"
+    ca: "{{ kube_front_proxy_ca_crt }}"
+    cn: kubernetes_front_proxy_ca
+
+- name: Generate certificate for etcd
+  hosts: localhost
+  roles:
+    - signed-certificate
+  vars:
+    ansible_connection: local
+    ca: "{{ etcd_ca_crt }}"
+    ca_key: "{{ etcd_ca_key }}"
+    cert_key: "{{ etcd_cert_key }}"
+    cert_csr: "{{ etcd_cert_csr }}"
+    cert: "{{ etcd_cert_crt }}"
+    cn: kube-etcd
+    san: 'localhost,127.0.0.1'
+
+- name: Generate certificate for etcd healthcheck client
+  hosts: localhost
+  roles:
+    - signed-certificate
+  vars:
+    ansible_connection: local
+    ca: "{{ etcd_ca_crt }}"
+    ca_key: "{{ etcd_ca_key }}"
+    cert_key: "{{ etcd_health_check_cert_key }}"
+    cert_csr: "{{ etcd_health_check_cert_csr }}"
+    cert: "{{ etcd_health_check_cert_crt }}"
+    cn: kube-etcd-healthcheck-client
+
+- name: Generate certificate for etcd apiserver client
+  hosts: localhost
+  roles:
+    - signed-certificate
+  vars:
+    ansible_connection: local
+    ca: "{{ etcd_ca_crt }}"
+    ca_key: "{{ etcd_ca_key }}"
+    cert_key: "{{ apiserver_etcd_client_cert_key }}"
+    cert_csr: "{{ apiserver_etcd_client_cert_csr }}"
+    cert: "{{ apiserver_etcd_client_cert_crt }}"
+    cn: kube-apiserver-etcd-client
+    o: system:masters

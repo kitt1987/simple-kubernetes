@@ -1,0 +1,14 @@
+- name: Check CA existence
+  stat:
+    path: "{{ ca }}"
+  register: ca_state
+
+- name: Check CA key existence
+  stat:
+    path: "{{ ca_key }}"
+  register: ca_key_state
+
+- name: Generate CA and private Key
+  shell: |
+    openssl req -newkey rsa:4096 -nodes -keyout {{ ca_key }} -x509 -subj "/CN={{ cn }}" -days 3650 -out {{ ca }}
+  when: ca_state.stat.exists == False or ca_key_state.stat.exists == False

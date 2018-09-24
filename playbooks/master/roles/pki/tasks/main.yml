@@ -1,0 +1,9 @@
+- name: Setup Directories
+  set_fact:
+    remote_pki_path: /etc/kubernetes/pki
+  when: remote_pki_path is not defined
+
+- name: Replicate PKI
+  copy:
+    src: "{{ pki_path }}"
+    dest: "{{ remote_pki_path }}"

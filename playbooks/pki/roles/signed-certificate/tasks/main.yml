@@ -1,0 +1,74 @@
+- name: Complete empty variables
+  set_fact:
+    subject: ''
+    formatted_san: ''
+
+- name: Generate Subjects
+  set_fact:
+    subject: "O = {{ o }}"
+  when: o is defined
+
+- name: Generate SAN
+  shell: |
+    export sanWithSpaces=$(echo {{ san }} | tr "," " ")
+    export sanArray=($sanWithSpaces)
+    
+    echo 'subjectAltName = @alt_names'
+    echo '[alt_names]'
+
+    for i in "${!sanArray[@]}"; do
+        san="${sanArray[$i]}"
+        if [[ $san =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            printf "%s\nIP.%s = %s" "$sanFormatted" "$(($i+1))" "${sanArray[$i]}"
+        else
+            printf "%s\nDNS.%s = %s" "$sanFormatted" "$(($i+1))" "${sanArray[$i]}"
+        fi
+    done
+  register: san_generator
+  when: san is defined
+
+- debug:
+    msg: "{{ san_generator }}"
+
+- name: Generate SAN
+  set_fact:
+    formatted_san: "{{ san_generator.stdout }}"
+  when: san is defined
+
+- debug:
+    msg: "/CN={{ cn }},/Subject={{ subject }},/SAN={{ formatted_san }}"
+
+- name: Check CNF file existence
+  stat:
+    path: "{{ cert }}.cnf"
+  register: cnf_state
+
+- name: Generate CNF file
+  template:
+    src: cnf.j2
+    dest: "{{ cert }}.cnf"
+  when: cnf_state.stat.exists == False
+
+- name: Check certificate file existence
+  stat:
+    path: "{{ cert }}"
+  register: cert_state
+
+- name: Check certificate key file existence
+  stat:
+    path: "{{ cert_key }}"
+  register: cert_key_state
+
+- name: Generate Certificate and Private Key
+  shell: |
+    set -e
+    openssl req -out {{ cert_csr }} -new -newkey rsa:4096 -nodes -keyout {{ cert_key }} -config {{ cert }}.cnf
+    openssl x509 -req -days 3650 -in {{ cert_csr }} -CA {{ ca }} -CAkey {{ ca_key }} -CAcreateserial -extfile {{ cert }}.cnf -extensions v3_req -out {{ cert }} -sha256
+    rm -f {{ cert }}.cnf
+    set +e
+  register: debug_cert
+  when: cert_state.stat.exists == False or cert_key_state.stat.exists == False
+  
+- debug:
+    msg: "{{ debug_cert }}"
+  when: cert_state.stat.exists == False or cert_key_state.stat.exists == False

@@ -1,0 +1,10 @@
+- name: Complete empty environment
+  set_fact:
+    remote_cert_path: /etc/kubernetes/kubelet.conf
+    tmp_cert_path: /tmp/kubelet-{{ node }}.conf
+  when: remote_cert_path not defined
+
+- name: Upload certificate
+  fetch:
+    src: "{{ tmp_cert_path }}"
+    dest: "{{ remote_cert_path }}"

@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ""
+  labels:
+    component: etcd
+    tier: control-plane
+  name: etcd
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - etcd
+    - --data-dir=/var/lib/etcd
+    - --listen-client-urls=https://127.0.0.1:2379
+    - --advertise-client-urls=https://127.0.0.1:2379
+    - --listen-peer-urls=https://127.0.0.1:2380
+    - --initial-advertise-peer-urls=https://127.0.0.1:2380
+    - --initial-cluster=https://127.0.0.1:2380
+    - --trusted-ca-file=/etc/pki/etcd_ca.crt
+    - --peer-trusted-ca-file=/etc/pki/etcd_ca.crt
+    - --cert-file=/etc/pki/server.crt
+    - --key-file=/etc/pki/server.key
+    - --peer-client-cert-auth=true
+    - --peer-cert-file=/etc/pki/peer.crt
+    - --peer-key-file=/etc/pki/peer.key
+    - --client-cert-auth=true
+    image: quay.io/coreos/etcd:v3.2.18
+    livenessProbe:
+      failureThreshold: 8
+      exec:
+        command:
+        - etcdctl
+        - --endpoints=https://localhost:2379
+        - --cert-file=/etc/pki/healthcheck-client.crt
+        - --key-file=/etc/pki/healthcheck-client.key
+        - --ca-file=/etc/pki/etcd_ca.crt
+        - endpoint
+        - health
+      initialDelaySeconds: 15
+      timeoutSeconds: 15
+    name: etcd
+    resources: {}
+    volumeMounts:
+    - mountPath: /var/lib/etcd
+      name: etcd
+    - mountPath: /etc/pki
+      name: pki
+  hostNetwork: true
+  volumes:
+  - hostPath:
+      path: /var/lib/etcd
+      type: DirectoryOrCreate
+    name: etcd
+  - hostPath:
+      path: /etc/kubernetes/pki/etcd
+      type: DirectoryOrCreate
+    name: pki
