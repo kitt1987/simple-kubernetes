@@ -10,7 +10,7 @@
 
 - name: Replicate apps
   copy:
-    src: "{{ app_path }}/"
+    src: "{{ app_path }}"
     dest: "{{ remote_app_path }}"
     force: no
 
