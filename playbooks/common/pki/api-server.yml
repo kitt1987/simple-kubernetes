@@ -1,28 +1,21 @@
-- name: Set default values
-  hosts: localhost
-  roles:
-    - default_fact
-    
 - name: Generate certificate for api-server
-  hosts: localhost
+  hosts: master
   roles:
     - signed-certificate
   vars:
-    ansible_connection: local
     ca: "{{ kube_ca_crt }}"
     ca_key: "{{ kube_ca_key }}"
     cert_key: "{{ apiserver_cert_key }}"
     cert_csr: "{{ apiserver_cert_csr }}"
     cert: "{{ apiserver_cert_crt }}"
     cn: kube-apiserver
-    san: "{{ hostname }},{{ hostIP }},localhost,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local"
+    san: "{{ inventory_hostname }},{{ ansible_default_ipv4.address }},localhost,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local"
 
 - name: Generate certificate for kubelet client
-  hosts: localhost
+  hosts: master
   roles:
     - signed-certificate
   vars:
-    ansible_connection: local
     ca: "{{ kube_ca_crt }}"
     ca_key: "{{ kube_ca_key }}"
     cert_key: "{{ kubelet_client_cert_key }}"
@@ -32,11 +25,10 @@
     o: system:masters
 
 - name: Generate certificate for controller-manager
-  hosts: localhost
+  hosts: master
   roles:
     - signed-certificate
   vars:
-    ansible_connection: local
     ca: "{{ kube_ca_crt }}"
     ca_key: "{{ kube_ca_key }}"
     cert_key: "{{ controller_manager_cert_key }}"
@@ -45,11 +37,10 @@
     cn: system:kube-controller-manager
 
 - name: Generate certificate for scheduler
-  hosts: localhost
+  hosts: master
   roles:
     - signed-certificate
   vars:
-    ansible_connection: local
     ca: "{{ kube_ca_crt }}"
     ca_key: "{{ kube_ca_key }}"
     cert_key: "{{ scheduler_cert_key }}"
@@ -58,11 +49,10 @@
     cn: system:kube-scheduler
 
 - name: Generate certificate for kubectl
-  hosts: localhost
+  hosts: master
   roles:
     - signed-certificate
   vars:
-    ansible_connection: local
     ca: "{{ kube_ca_crt }}"
     ca_key: "{{ kube_ca_key }}"
     cert_key: "{{ admin_cert_key }}"
@@ -70,3 +60,15 @@
     cert: "{{ admin_cert_crt }}"
     cn: kubernetes-admin
     o: system:masters
+
+- name: Generate certificate for front-proxy-client
+  hosts: master
+  roles:
+  - signed-certificate
+  vars:
+    ca: "{{ kube_front_proxy_ca_crt }}"
+    ca_key: "{{ kube_front_proxy_ca_key }}"
+    cert_key: "{{ kube_front_proxy_client_cert_key }}"
+    cert_csr: "{{ kube_front_proxy_client_cert_csr }}"
+    cert: "{{ kube_front_proxy_client_cert_crt }}"
+    cn: front-proxy-client

@@ -1,0 +1,17 @@
+- name: Generate certificate for kubelet
+  include_role:
+    name: signed-certificate
+  vars:
+    ca: "{{ kube_ca_crt }}"
+    ca_key: "{{ kube_ca_key }}"
+    cert_key: "{{ kubelet_cert_key }}"
+    cert_csr: "{{ kubelet_cert_csr }}"
+    cert: "{{ kubelet_cert_crt }}"
+    cn: "system:node:{{ item }}"
+    o: system:nodes
+    kubelet_cert_key: "{{ pki_path }}/kubelet-{{ item }}-key.pem"
+    kubelet_cert_crt: "{{ pki_path }}/kubelet-{{ item }}.pem"
+    kubelet_cert_csr: "{{ pki_path }}/kubelet-{{ item }}-csr.pem"
+  with_inventory_hostnames:
+    - master
+    - nodes

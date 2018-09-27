@@ -10,7 +10,7 @@
 
 - name: Generate SAN
   shell: |
-    export sanWithSpaces=$(echo {{ san }} | tr "," " ")
+    export sanWithSpaces=$(echo "{{ san }}" | tr "," " ")
     export sanArray=($sanWithSpaces)
     
     echo 'subjectAltName = @alt_names'
@@ -24,6 +24,8 @@
             printf "%s\nDNS.%s = %s" "$sanFormatted" "$(($i+1))" "${sanArray[$i]}"
         fi
     done
+  args:
+    executable: /bin/bash
   register: san_generator
   when: san is defined
 

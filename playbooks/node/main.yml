@@ -1,17 +1,11 @@
-- import_playbook: ../pki/node.yml
-
-- name: Set default values
-  hosts: nodes
-  roles:
-    - default_fact
-
-- name: Generate Certificates for Nodes
+- name: Download certificates for nodes
   hosts: master
   roles:
-    - certificates
+    - download-certificates
 
 - name: Install Node
   hosts: nodes
   roles:
+    - package
     - update-certificate
     - kubelet

@@ -17,14 +17,14 @@ spec:
     - --leader-elect=true
     - --use-service-account-credentials=true
     - --kubeconfig=/etc/kubernetes/kube-controller-manager.conf
-    - --root-ca-file=/etc/kubernetes/pki/ca.crt
-    - --service-account-private-key-file=/etc/kubernetes/pki/apiserver.key
-    - --cluster-signing-cert-file=/etc/kubernetes/pki/apiserver.crt
-    - --cluster-signing-key-file=/etc/kubernetes/pki/apiserver.key
+    - --root-ca-file=/etc/kubernetes/pki/kube-ca.pem
+    - --service-account-private-key-file=/etc/kubernetes/pki/kube-api-server-key.pem
+    - --cluster-signing-cert-file=/etc/kubernetes/pki/kube-api-server.pem
+    - --cluster-signing-key-file=/etc/kubernetes/pki/kube-api-server-key.pem
     - --allocate-node-cidrs=true
     - --cluster-cidr=10.20.0.0/16
     - --node-cidr-mask-size=24
-    image: gcr.io/google_containers/kube-controller-manager:v1.10.4
+    image: gcr.io/google_containers/kube-controller-manager:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:
@@ -45,7 +45,7 @@ spec:
     - mountPath: /etc/ssl/certs
       name: ca-certs
       readOnly: true
-    - mountPath: /etc/kubernetes/controller-manager.conf
+    - mountPath: /etc/kubernetes/kube-controller-manager.conf
       name: kubeconfig
       readOnly: true
     - mountPath: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
@@ -57,7 +57,7 @@ spec:
       type: DirectoryOrCreate
     name: ca-certs
   - hostPath:
-      path: /etc/kubernetes/controller-manager.conf
+      path: /etc/kubernetes/kube-controller-manager.conf
       type: FileOrCreate
     name: kubeconfig
   - hostPath:

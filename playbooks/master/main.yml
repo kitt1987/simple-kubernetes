@@ -1,17 +1,12 @@
-- import_playbook: ../pki/etcd.yml
-- import_playbook: ../pki/etcd-peer.yml
-- import_playbook: ../pki/api-server.yml
-- import_playbook: ../pki/node.yml
-
-- name: Set default values
-  hosts: master
-  roles:
-    - default_fact
+- import_playbook: ../common/pki/etcd.yml
+- import_playbook: ../common/pki/etcd-peer.yml
+- import_playbook: ../common/pki/api-server.yml
+- import_playbook: ../common/pki/node.yml
 
 - name: Install master
   hosts: master
   roles:
-    - pki
     - package
     - manifest
     - kubelet
+    - node-cert

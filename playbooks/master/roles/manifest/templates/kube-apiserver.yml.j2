@@ -12,36 +12,32 @@ spec:
   containers:
   - command:
     - kube-apiserver
-    - --token-auth-file=/var/lib/kube-apiserver/known_tokens.csv
     - --requestheader-group-headers=X-Remote-Group
-    #- --service-account-key-file=/etc/kubernetes/pki/server.key
-    - --client-ca-file=/etc/kubernetes/pki/ca.crt
-    - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
-    #- --insecure-port=80
-    #- --insecure-bind-address=10.37.129.5
+    - --client-ca-file=/etc/kubernetes/pki/kube-ca.pem
+    - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.pem
+    - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client-key.pem
     - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
     - --requestheader-username-headers=X-Remote-User
     - --requestheader-extra-headers-prefix=X-Remote-Extra-
-    - --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
+    - --tls-private-key-file=/etc/kubernetes/pki/kube-api-server-key.pem
+    - --tls-cert-file=/etc/kubernetes/pki/kube-api-server.pem
     - --secure-port=6443
     - --allow-privileged=true
     - --requestheader-allowed-names=front-proxy-client
     - --service-cluster-ip-range=10.21.0.0/16
-    - --tls-cert-file=/etc/kubernetes/pki/apiserver.crt
-    - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt
-    - --proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt
+    - --requestheader-client-ca-file=/etc/kubernetes/pki/kube-front-proxy-ca.pem
+    - --proxy-client-cert-file=/etc/kubernetes/pki/kube-front-proxy-client.pem
+    - --proxy-client-key-file=/etc/kubernetes/pki/kube-front-proxy-client-key.pem
     - --admission-control=Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota
     - --enable-bootstrap-token-auth=true
     - --advertise-address=0.0.0.0
-    - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt
-    - --proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key
     - --authorization-mode=Node,RBAC
     - --etcd-servers=https://127.0.0.1:2379
-    - --etcd-cafile=/etc/kubernetes/pki/etcd/etcd_ca.crt
-    - --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt
-    - --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key
+    - --etcd-cafile=/etc/kubernetes/pki/etcd-ca.pem
+    - --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.pem
+    - --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client-key.pem
     - --feature-gates=DynamicKubeletConfig=true
-    image: gcr.io/google_containers/kube-apiserver:v1.10.4
+    image: gcr.io/google_containers/kube-apiserver:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:
@@ -62,9 +58,6 @@ spec:
     - mountPath: /etc/kubernetes/pki
       name: k8s-certs
       readOnly: true
-    - mountPath: /var/lib/kube-apiserver/known_tokens.csv
-      name: token
-      readOnly: true
   hostNetwork: true
   volumes:
   - hostPath:
@@ -75,7 +68,3 @@ spec:
       path: /etc/ssl/certs
       type: DirectoryOrCreate
     name: ca-certs
-  - hostPath:
-      path: /var/lib/kube-apiserver/known_tokens.csv
-      type: File
-    name: token

@@ -1,0 +1,9 @@
+- name: Clear kubelet configuration
+  hosts: all
+  roles:
+  - kubelet
+
+- name: Clear etcd configuration
+  hosts: master
+  roles:
+  - etcd

@@ -1,2 +1,9 @@
 [master]
+m1.no.kube.lab.io
+
 [nodes]
+n1.no.kube.lab.io
+
+[all:vars]
+ansible_user=root
+ansible_python_interpreter=/usr/bin/python3

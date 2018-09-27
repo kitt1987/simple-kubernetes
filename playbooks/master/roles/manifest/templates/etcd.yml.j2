@@ -17,27 +17,26 @@ spec:
     - --advertise-client-urls=https://127.0.0.1:2379
     - --listen-peer-urls=https://127.0.0.1:2380
     - --initial-advertise-peer-urls=https://127.0.0.1:2380
-    - --initial-cluster=https://127.0.0.1:2380
-    - --trusted-ca-file=/etc/pki/etcd_ca.crt
-    - --peer-trusted-ca-file=/etc/pki/etcd_ca.crt
-    - --cert-file=/etc/pki/server.crt
-    - --key-file=/etc/pki/server.key
+    - --initial-cluster=default=https://127.0.0.1:2380
+    - --trusted-ca-file=/etc/pki/etcd-ca.pem
+    - --peer-trusted-ca-file=/etc/pki/etcd-ca.pem
+    - --cert-file=/etc/pki/kube-etcd-server.pem
+    - --key-file=/etc/pki/kube-etcd-server-key.pem
     - --peer-client-cert-auth=true
-    - --peer-cert-file=/etc/pki/peer.crt
-    - --peer-key-file=/etc/pki/peer.key
+    - --peer-cert-file=/etc/pki/etcd-peer-{{ inventory_hostname }}.pem
+    - --peer-key-file=/etc/pki/etcd-peer-{{ inventory_hostname }}-key.pem
     - --client-cert-auth=true
-    image: quay.io/coreos/etcd:v3.2.18
+    image: quay.io/coreos/etcd:{{ etcd_version }}
     livenessProbe:
       failureThreshold: 8
       exec:
         command:
         - etcdctl
         - --endpoints=https://localhost:2379
-        - --cert-file=/etc/pki/healthcheck-client.crt
-        - --key-file=/etc/pki/healthcheck-client.key
-        - --ca-file=/etc/pki/etcd_ca.crt
-        - endpoint
-        - health
+        - --cert-file=/etc/pki/etcd-healthcheck-client.pem
+        - --key-file=/etc/pki/etcd-healthcheck-client-key.pem
+        - --ca-file=/etc/pki/etcd-ca.pem
+        - cluster-health
       initialDelaySeconds: 15
       timeoutSeconds: 15
     name: etcd
@@ -54,6 +53,6 @@ spec:
       type: DirectoryOrCreate
     name: etcd
   - hostPath:
-      path: /etc/kubernetes/pki/etcd
+      path: /etc/kubernetes/pki
       type: DirectoryOrCreate
     name: pki

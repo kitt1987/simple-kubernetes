@@ -1,0 +1,4 @@
+- name: Generate certificate for kubelet
+  hosts: master
+  roles:
+    - node-cert

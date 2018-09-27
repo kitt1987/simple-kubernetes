@@ -1,8 +1,3 @@
-- name: Setup Directories
-  set_fact:
-    manifest_path: /etc/kubernetes/manifests
-  when: manifest_path is not defined
-
 - name: Make sure the manifest directory exists
   file:
     path: "{{ manifest_path }}"
@@ -11,19 +6,19 @@
 - name: Replicate etcd manifests
   template:
     src: etcd.yml.j2
-    dst: "{{ manifest_path }}/etcd.yml"
+    dest: "{{ manifest_path }}/etcd.yml"
 
 - name: Replicate api-server manifests
   template:
     src: kube-apiserver.yml.j2
-    dst: "{{ manifest_path }}/kube-apiserver.yml"
+    dest: "{{ manifest_path }}/kube-apiserver.yml"
 
 - name: Replicate controller-manager manifests
   template:
     src: kube-controller-manager.yml.j2
-    dst: "{{ manifest_path }}/kube-controller-manager.yml"
+    dest: "{{ manifest_path }}/kube-controller-manager.yml"
 
 - name: Replicate kube-scheduler manifests
   template:
     src: kube-scheduler.yml.j2
-    dst: "{{ manifest_path }}/kube-scheduler.yml"
+    dest: "{{ manifest_path }}/kube-scheduler.yml"
