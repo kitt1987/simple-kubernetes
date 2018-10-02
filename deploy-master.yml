@@ -1,0 +1,29 @@
+- name: Install PKI
+  hosts: master
+  roles:
+    - kube-pki
+    - etcd
+
+- name: Install manifests
+  hosts: master
+  tasks:
+  - import_role:
+      name: common
+      tasks_from: install-manifest
+
+- name: Install kubelet
+  hosts: master
+  tasks:
+  - import_role:
+      name: kubelet
+      tasks_from: replicate-bootstrap-service
+  - import_role:
+      name: kubelet
+      tasks_from: common
+
+- name: Install api-server, kube-proxy and coredns
+  hosts: master
+  roles:
+    - api-server
+    - kube-proxy
+    - coredns

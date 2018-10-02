@@ -1,0 +1,5 @@
+- name: Generate certificates for api server
+  include_tasks: pki.yml
+
+- name: Generate certificates for infrastructure
+  include_tasks: cert.yml

@@ -1,0 +1,18 @@
+- name: Disable swap
+  shell: |
+    swapoff -a
+    sed -ri  's/^[^#]\S+\s+none\s+swap\s+/# &/' /etc/fstab
+  args:
+    executable: /bin/bash
+
+- name: Set hostname
+  shell: hostnamectl set-hostname {{ inventory_hostname }}
+  args:
+    executable: /bin/bash
+
+- name: Enable kubelet service
+  systemd:
+    name: kubelet.service
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

@@ -1,4 +1,0 @@
-- name: Set default values
-  hosts: all
-  roles:
-  - initial

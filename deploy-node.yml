@@ -1,0 +1,30 @@
+- name: Install kubelet
+  hosts: nodes
+  tasks:
+  - import_role:
+      name: common
+      tasks_from: create-dir-kubelet
+
+- name: Install configuration for kubelet
+  hosts: master
+  tasks:
+  - import_role:
+      name: api-server
+      tasks_from: sync-node-cert
+
+- name: Install kubelet
+  hosts: nodes
+  tasks:
+  - import_role:
+      name: kubelet
+      tasks_from: replicate-service
+  - import_role:
+      name: kubelet
+      tasks_from: common
+
+- name: Set node labels
+  hosts: master
+  tasks:
+  - import_role:
+      name: common
+      tasks_from: set-node-label

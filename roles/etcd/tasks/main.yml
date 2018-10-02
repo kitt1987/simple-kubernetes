@@ -1,0 +1,50 @@
+- name: Generate CA for etcd
+  include_tasks: ../../common/tasks/ca.yml
+  vars:
+    ca_key: "{{ etcd_ca_key }}"
+    ca_csr: "{{ etcd_ca_csr }}"
+    ca: "{{ etcd_ca_crt }}"
+    cn: etcd-ca
+
+- name: Generate certificate for etcd
+  include_tasks: ../../common/tasks/signed-certificate.yml
+  vars:
+    ca: "{{ etcd_ca_crt }}"
+    ca_key: "{{ etcd_ca_key }}"
+    cert_key: "{{ etcd_cert_key }}"
+    cert_csr: "{{ etcd_cert_csr }}"
+    cert: "{{ etcd_cert_crt }}"
+    cn: kube-etcd
+    san: 'localhost,127.0.0.1'
+
+- name: Generate certificate for etcd healthcheck client
+  include_tasks: ../../common/tasks/signed-certificate.yml
+  vars:
+    ca: "{{ etcd_ca_crt }}"
+    ca_key: "{{ etcd_ca_key }}"
+    cert_key: "{{ etcd_health_check_cert_key }}"
+    cert_csr: "{{ etcd_health_check_cert_csr }}"
+    cert: "{{ etcd_health_check_cert_crt }}"
+    cn: kube-etcd-healthcheck-client
+
+- name: Generate certificate for etcd apiserver client
+  include_tasks: ../../common/tasks/signed-certificate.yml
+  vars:
+    ca: "{{ etcd_ca_crt }}"
+    ca_key: "{{ etcd_ca_key }}"
+    cert_key: "{{ apiserver_etcd_client_cert_key }}"
+    cert_csr: "{{ apiserver_etcd_client_cert_csr }}"
+    cert: "{{ apiserver_etcd_client_cert_crt }}"
+    cn: kube-apiserver-etcd-client
+    o: system:masters
+
+- name: Generate certificate for etcd peer
+  include_tasks: ../../common/tasks/signed-certificate.yml
+  vars:
+    ca: "{{ etcd_ca_crt }}"
+    ca_key: "{{ etcd_ca_key }}"
+    cert_key: "{{ pki_path }}/etcd-peer-{{ inventory_hostname }}-key.pem"
+    cert_csr: "{{ pki_path }}/etcd-peer-{{ inventory_hostname }}-csr.pem"
+    cert: "{{ pki_path }}/etcd-peer-{{ inventory_hostname }}.pem"
+    cn: kube-etcd-peer
+    san: "{{ inventory_hostname }},{{ ansible_default_ipv4.address }},localhost,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local"

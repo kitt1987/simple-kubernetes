@@ -1,0 +1,12 @@
+[Unit]
+Description=kubelet: The Kubernetes Node Agent
+Documentation=http://kubernetes.io/docs/
+
+[Service]
+ExecStart=/usr/local/bin/kubelet --pod-infra-container-image=kubernetes/pause:latest --kubeconfig=/etc/kubernetes/kubelet.conf --pod-manifest-path=/etc/kubernetes/manifests --cluster-dns={{ cluster_dns }} --cluster-domain=cluster.local --pod-cidr={{ pod_cidr }} --register-node --allow-privileged
+Restart=always
+StartLimitInterval=0
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+- name: Upload package
+  include_tasks: ../../kube-release-package/tasks/upload-package.yml
+
+- name: Load images
+  shell: |
+    for tar in *.tar; do
+      docker load -i ${tar}
+    done
+    tar zxf kubernetes-server-linux-amd64.tar.gz
+    pushd kubernetes/server/bin > /dev/null
+    docker load -i kube-proxy.tar
+    cp kubeadm kubectl kubelet /usr/local/bin
+    popd > /dev/null
+    rm -rf kubernetes-server-linux-amd64.tar.gz kubernetes
+  args:
+    chdir: "{{ remote_app_path }}"
+    executable: /bin/bash
+  register: debug_extracting
+
+- debug:
+    msg: "{{ debug_extracting }}"

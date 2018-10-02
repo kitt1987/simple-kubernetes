@@ -1,9 +1,76 @@
 [master]
-m1.no.kube.lab.io
+# Specify the IP address if no DNS
+m1.no.weave.lab.io ansible_host=10.37.0.20
+# m1.no.weave.lab.io
 
 [nodes]
-n1.no.kube.lab.io
+n1.no.weave.lab.io ansible_host=10.37.0.32
+n2.no.weave.lab.io ansible_host=10.37.0.33
+#n1.no.weave.lab.io
+#n2.no.weave.lab.io
+
+[localhost]
+localhost
+
+[kubernetes_nodes:children]
+master
+nodes
 
 [all:vars]
+kube_release_version=v1.10.4
+etcd_version=v3.2.18
+
+pod_cidr=10.20.0.0/16
+service_cidr=10.21.0.0/16
+cluster_dns=10.21.0.10
+cluster_api_server=10.21.0.1
+
+kube_release_package_path="{{ playbook_dir }}/../../../kubernetes-release"
+
+[localhost:vars]
+ansible_connection=local
+
+[kubernetes_nodes:vars]
 ansible_user=root
 ansible_python_interpreter=/usr/bin/python3
+
+pki_path=/etc/kubernetes/pki
+csr_path=/etc/kubernetes/csr
+manifest_path=/etc/kubernetes/manifests
+kube_ca_key="{{ pki_path }}/kube-ca-key.pem"
+kube_ca_crt="{{ pki_path }}/kube-ca.pem"
+kube_ca_csr="{{ csr_path }}/kube-ca-csr.pem"
+etcd_ca_key="{{ pki_path }}/etcd-ca-key.pem"
+etcd_ca_crt="{{ pki_path }}/etcd-ca.pem"
+etcd_ca_csr="{{ csr_path }}/etcd-ca-csr.pem"
+kube_front_proxy_ca_key="{{ pki_path }}/kube-front-proxy-ca-key.pem"
+kube_front_proxy_ca_crt="{{ pki_path }}/kube-front-proxy-ca.pem"
+kube_front_proxy_ca_csr="{{ csr_path }}/kube-front-proxy-ca-csr.pem"
+etcd_cert_key="{{ pki_path }}/kube-etcd-server-key.pem"
+etcd_cert_crt="{{ pki_path }}/kube-etcd-server.pem"
+etcd_cert_csr="{{ pki_path }}/kube-etcd-server-csr.pem"
+etcd_health_check_cert_key="{{ pki_path }}/etcd-healthcheck-client-key.pem"
+etcd_health_check_cert_crt="{{ pki_path }}/etcd-healthcheck-client.pem"
+etcd_health_check_cert_csr="{{ pki_path }}/etcd-healthcheck-client-csr.pem"
+apiserver_etcd_client_cert_key="{{ pki_path }}/apiserver-etcd-client-key.pem"
+apiserver_etcd_client_cert_crt="{{ pki_path }}/apiserver-etcd-client.pem"
+apiserver_etcd_client_cert_csr="{{ pki_path }}/apiserver-etcd-client-csr.pem"
+apiserver_cert_key="{{ pki_path }}/kube-api-server-key.pem"
+apiserver_cert_crt="{{ pki_path }}/kube-api-server.pem"
+apiserver_cert_csr="{{ pki_path }}/kube-api-server-csr.pem"
+kubelet_client_cert_key="{{ pki_path }}/apiserver-kubelet-client-key.pem"
+kubelet_client_cert_crt="{{ pki_path }}/apiserver-kubelet-client.pem"
+kubelet_client_cert_csr="{{ pki_path }}/apiserver-kubelet-client-csr.pem"
+controller_manager_cert_key="{{ pki_path }}/kube-controller-manager-key.pem"
+controller_manager_cert_crt="{{ pki_path }}/kube-controller-manager.pem"
+controller_manager_cert_csr="{{ pki_path }}/kube-controller-manager-csr.pem"
+scheduler_cert_key="{{ pki_path }}/kube-scheduler-key.pem"
+scheduler_cert_crt="{{ pki_path }}/kube-scheduler.pem"
+scheduler_cert_csr="{{ pki_path }}/kube-scheduler-csr.pem"
+admin_cert_key="{{ pki_path }}/admin-key.pem"
+admin_cert_crt="{{ pki_path }}/admin.pem"
+admin_cert_csr="{{ pki_path }}/admin-csr.pem"
+kube_front_proxy_client_cert_key="{{ pki_path }}/kube-front-proxy-client-key.pem"
+kube_front_proxy_client_cert_crt="{{ pki_path }}/kube-front-proxy-client.pem"
+kube_front_proxy_client_cert_csr="{{ pki_path }}/kube-front-proxy-client-csr.pem"
+remote_kubelet_certs_path="/tmp/kubelet-cert"

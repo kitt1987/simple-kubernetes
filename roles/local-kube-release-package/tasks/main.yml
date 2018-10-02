@@ -1,0 +1,5 @@
+- name: Determine the Kubernetes release version
+  include_tasks: ../../kube-release-package/tasks/determine-version.yml
+
+- name: Download the Kubernetes release package
+  include_tasks: ../../kube-release-package/tasks/verify-package.yml

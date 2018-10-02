@@ -1,9 +1,0 @@
-- name: Complete empty environment
-  set_fact:
-    tmp_cert_path: /tmp/kubelet-cert
-
-- name: Download certificate
-  synchronize:
-    src: "{{ remote_kubelet_certs_path }}/"
-    dest: "{{ tmp_cert_path }}"
-    mode: pull

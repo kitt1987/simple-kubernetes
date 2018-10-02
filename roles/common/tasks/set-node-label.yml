@@ -1,0 +1,5 @@
+- name: Generate config for kubelet
+  shell: |
+    kubectl label no {{ item }} --overwrite node-role.kubernetes.io/node=
+  with_inventory_hostnames:
+    - nodes

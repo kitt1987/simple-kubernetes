@@ -1,0 +1,4 @@
+- name: Clean Kubernetes configuraion
+  file:
+    path: /etc/kubernetes
+    state: directory

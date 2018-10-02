@@ -1,3 +1,0 @@
-- import_playbook: common/facts/main.yml
-- import_playbook: master/main.yml
-- import_playbook: node/main.yml

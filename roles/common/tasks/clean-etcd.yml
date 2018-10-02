@@ -1,0 +1,4 @@
+- name: Clean etcd files
+  file:
+    path: /var/lib/etcd
+    state: absent

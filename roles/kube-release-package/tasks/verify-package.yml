@@ -1,0 +1,16 @@
+- name: Check Kubernetes release package on the disk
+  stat:
+    path: "{{ playbook_dir }}/kube-release/kubernetes-server-linux-amd64.tar.gz"
+  register: release_state
+
+#FIXME verify the existed package
+
+- debug:
+    msg: "Downloading kubernetes release package of {{ kube_release_version }}"
+  when: release_state.stat.exists == False
+
+- name: Download Kubernetes release package
+  get_url:
+    url: https://dl.k8s.io/{{ kube_release_version }}/kubernetes-server-linux-amd64.tar.gz
+    dest: "{{ playbook_dir }}/kube-release/kubernetes-server-linux-amd64.tar.gz"
+  when: release_state.stat.exists == False

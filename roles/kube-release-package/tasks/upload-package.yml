@@ -1,0 +1,10 @@
+- name: Set remote path to kubernetes installer
+  set_fact:
+    remote_app_path: /root/kubernetes-release/
+  when: remote_app_path is not defined
+
+- name: Upload kubernestes release package to nodes
+  copy:
+    src: "{{ playbook_dir }}/kube-release/"
+    dest: "{{ remote_app_path }}"
+    force: no

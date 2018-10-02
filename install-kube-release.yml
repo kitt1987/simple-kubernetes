@@ -1,0 +1,16 @@
+- name: Prepare Kubernetes version and release package
+  hosts: localhost
+  roles:
+    - local-kube-release-package
+  vars:
+    ansible_connection: local
+
+- name: Install Kubernetes release package on master
+  hosts: master
+  roles:
+    - master-kube-release-package
+
+- name: Install Kubernetes release package on nodes
+  hosts: nodes
+  roles:
+    - node-kube-release-package

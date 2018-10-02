@@ -1,0 +1,19 @@
+- name: Figure out latest version of Kubernetes
+  uri:
+    url: https://api.github.com/repos/kubernetes/kubernetes/releases/latest
+    body_format: json
+    return_content: yes
+  register: kubernetes_rel_resp
+  when: kube_release_version is not defined
+
+- debug:
+    msg: "response: {{ kubernetes_rel_resp }}"
+  when: kube_release_version is not defined
+
+- name: Save Kubernetes version
+  set_fact:
+    kube_release_version: "{{ kubernetes_rel_resp.json.name }}"
+  when: kube_release_version is not defined
+
+- debug:
+    msg: "Kubernetes {{ kube_release_version }} will be installed"

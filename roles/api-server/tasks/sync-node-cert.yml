@@ -1,0 +1,9 @@
+- name: Sync certificate
+  synchronize:
+    src: "{{ remote_kubelet_certs_path }}/kubelet-{{ item }}.config"
+    dest: "/etc/kubernetes/kubelet.conf"
+    mode: pull
+    private_key: /root/.ssh/kube-node-ssh-key
+  delegate_to: "{{ item }}"
+  with_inventory_hostnames:
+    - nodes

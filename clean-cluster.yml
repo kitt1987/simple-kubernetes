@@ -1,0 +1,13 @@
+- name: Clear kubelet configuration
+  hosts: kubernetes_nodes
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: clean-node
+
+- name: Clear etcd configuration
+  hosts: master
+  tasks:
+  - import_role:
+      name: common
+      tasks_from: clean-etcd

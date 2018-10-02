@@ -1,0 +1,25 @@
+- name: Make sure the PKI directoriy exists
+  file:
+    path: "{{ pki_path }}"
+    state: directory
+
+- name: Make sure the CSR directoriy exists
+  file:
+    path: "{{ csr_path }}"
+    state: directory
+
+- name: Generate CA for kubernetes
+  include_tasks: ../../common/tasks/ca.yml
+  vars:
+    ca_key: "{{ kube_ca_key }}"
+    ca_csr: "{{ kube_ca_csr }}"
+    ca: "{{ kube_ca_crt }}"
+    cn: kubernetes-ca
+
+- name: Generate CA for kubernetes front proxy
+  include_tasks: ../../common/tasks/ca.yml
+  vars:
+    ca_key: "{{ kube_front_proxy_ca_key }}"
+    ca_csr: "{{ kube_front_proxy_ca_csr }}"
+    ca: "{{ kube_front_proxy_ca_crt }}"
+    cn: kubernetes_front_proxy_ca

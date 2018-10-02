@@ -1,0 +1,4 @@
+- name: Replicate systemd unit for bootstrap kubelet
+  template:
+    src: kubelet-bootstrap.service.j2
+    dest: /lib/systemd/system/kubelet.service

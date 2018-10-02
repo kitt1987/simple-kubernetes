@@ -1,0 +1,15 @@
+- name: Prepare SSH key
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: ssh-access
+      tasks_from: gen-ssh-key
+  vars:
+    ansible_connection: local
+
+- name: Install SSH key
+  hosts: kubernetes_nodes
+  tasks:
+  - import_role:
+      name: ssh-access
+      tasks_from: upload-ssh-key-to-nodes

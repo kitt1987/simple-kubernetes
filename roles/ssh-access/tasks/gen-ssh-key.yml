@@ -1,0 +1,13 @@
+- name: Check SSH key
+  stat:
+    path: "{{ playbook_dir }}/node-ssh-key/kube-node-ssh-key"
+  register: ssh_key_file_state
+
+- name: Check SSH key
+  stat:
+    path: "{{ playbook_dir }}/node-ssh-key/kube-node-ssh-key.pub"
+  register: ssh_key_pub_file_state
+
+- name: Generate SSH key for nodes
+  shell: ssh-keygen -q -t rsa -f {{ playbook_dir }}/node-ssh-key/kube-node-ssh-key -C "simple-kubernetes" -N ""
+  when: ssh_key_pub_file_state.stat.exists == False and ssh_key_file_state.stat.exists == False
