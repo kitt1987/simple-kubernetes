@@ -1,0 +1,1 @@
+Simple Kubernetes will generate an hosts file here to update each host if no DNS.

@@ -9,6 +9,16 @@
     dest: "/tmp/deploy.sh"
     mode: 0755
 
+- name: Install epel for CentOS
+  package:
+    name: epel-release
+    state: present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+
+- name: Update yum repo
+  shell: yum makecache -y
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+
 - name: Install jq for CoreDNS bootstrap
   package:
     name: jq

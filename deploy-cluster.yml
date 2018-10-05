@@ -1,4 +1,6 @@
+- import_playbook: disclose-hostname.yml
 - import_playbook: install-ssh-key.yml
+- import_playbook: install-docker.yml
 - import_playbook: install-kube-release.yml
 - import_playbook: deploy-master.yml
 - import_playbook: deploy-node.yml

@@ -10,6 +10,11 @@
   args:
     executable: /bin/bash
 
+- name: Make sure the manifest directory exists
+  file:
+    path: "{{ manifest_path }}"
+    state: directory
+
 - name: Enable kubelet service
   systemd:
     name: kubelet.service

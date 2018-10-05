@@ -34,6 +34,8 @@ Or, clean an installation.
 `ansible-playbook -i {{inventory}} clean-cluster.yml`
 
 ##Things haven't done
-- [ ] Install compatible Docker automatically
+- [x] Install compatible Docker automatically
+- [x] Modify /etc/hosts to make hosts know each other if no DNS
 - [ ] Figure out the latest Kubernetes release from Github
 - [ ] Verify existed Kubernetes release package
+- [ ] Install HA clusters

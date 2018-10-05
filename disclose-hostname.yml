@@ -1,0 +1,15 @@
+- name: Detect DNS and generate the hosts file
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: disclose-hostname
+      tasks_from: detect_dns
+  vars:
+    ansible_connection: local
+
+- name: Apply the hosts file
+  hosts: kubernetes_nodes
+  tasks:
+  - import_role:
+      name: disclose-hostname
+      tasks_from: update_hosts

@@ -1,0 +1,26 @@
+- name: Disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+- name: Disable SeLinux
+  shell: |
+    setenforce 0
+    sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+  args:
+    executable: /bin/bash
+
+- name: Install yum utility for CentOS
+  package:
+    name: yum-utils
+    state: present
+
+- name: Install rsync utility for CentOS
+  package:
+    name: rsync
+    state: present
+
+- name: Add Repository for CentOS
+  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+

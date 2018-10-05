@@ -4,16 +4,17 @@
     body_format: json
     return_content: yes
   register: kubernetes_rel_resp
-  when: kube_release_version is not defined
 
 - debug:
     msg: "response: {{ kubernetes_rel_resp }}"
-  when: kube_release_version is not defined
 
 - name: Save Kubernetes version
   set_fact:
     kube_release_version: "{{ kubernetes_rel_resp.json.name }}"
-  when: kube_release_version is not defined
+  delegate_facts: True
+  delegate_to: "{{item}}"
+  with_inventory_hostnames:
+  - kubernetes_nodes
 
 - debug:
     msg: "Kubernetes {{ kube_release_version }} will be installed"
