@@ -3,8 +3,6 @@
     path: "{{ playbook_dir }}/kube-release/kubernetes-server-linux-amd64.tar.gz"
   register: release_state
 
-#FIXME verify the existed package
-
 - debug:
     msg: "Downloading kubernetes release package of {{ kube_release_version }}"
   when: release_state.stat.exists == False

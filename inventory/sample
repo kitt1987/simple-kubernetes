@@ -17,7 +17,7 @@ master
 nodes
 
 [all:vars]
-kube_release_version=v1.10.4
+kube_release_version=v1.12.0
 etcd_version=v3.2.18
 
 pod_cidr=10.20.0.0/16
@@ -25,13 +25,12 @@ service_cidr=10.21.0.0/16
 cluster_dns=10.21.0.10
 cluster_api_server=10.21.0.1
 
-kube_release_package_path="{{ playbook_dir }}/../../../kubernetes-release"
-
 [localhost:vars]
 ansible_connection=local
 
 [kubernetes_nodes:vars]
 ansible_user=root
+# Replace with ansible_python_interpreter=/usr/bin/python on CentOS/RHEL
 ansible_python_interpreter=/usr/bin/python3
 
 pki_path=/etc/kubernetes/pki
