@@ -1,20 +1,27 @@
 - name: Figure out latest version of Kubernetes
   uri:
-    url: https://api.github.com/repos/kubernetes/kubernetes/releases/latest
+    url: https://api.github.com/repos/kubernetes/kubernetes/releases
     body_format: json
     return_content: yes
   register: kubernetes_rel_resp
 
-- debug:
-    msg: "response: {{ kubernetes_rel_resp }}"
+- name: Save Initial Kubernetes version
+  set_fact:
+    kube_release_version: "0.0.0"
 
 - name: Save Kubernetes version
   set_fact:
-    kube_release_version: "{{ kubernetes_rel_resp.json.name }}"
+    kube_release_version: "{{ item }}"
+  when: item is version(kube_release_version, '>')
+  with_items: "{{ kubernetes_rel_resp.json | map(attribute='name') | select('match','^((?!rc)(?!alpha)(?!beta).)*$') | list }}"
+
+- name: Save Kubernetes version for each node
+  set_fact:
+    kube_release_version: "{{ kube_release_version }}"
   delegate_facts: True
   delegate_to: "{{item}}"
   with_inventory_hostnames:
-  - kubernetes_nodes
+    - kubernetes_nodes
 
 - debug:
     msg: "Kubernetes {{ kube_release_version }} will be installed"
