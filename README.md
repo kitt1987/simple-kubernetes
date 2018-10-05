@@ -8,18 +8,22 @@ This project aims to install Kubernetes without any dependencies on private or b
 Simple Kubernetes is an Ansible playbook. You need to install Ansible 2.6 on your workstation.
 
 **Github or The Server Binaries Kubernetes released**
+
 Simple Kubernetes will load Kubernetes images and programs from the server-side binaries released on Github. You can either download it manually and saved into directory 'kube-release' or let the program do it for you.
 
 ## Inventory
 You can copy and paster a new inventory from inventory/sample. The most important part is to specify master and nodes. You may also change some variables to make the program compatible with your environment, which are,
 
 **kube_release_version**
+
 You can also set the version of Kubernetes you would like to install. Or, the program will choose the latest release.
 
 **ansible_python_interpreter**
+
 If your hosts are CentOS or RHEL, you should set this variable to `/usr/bin/python`.
 
 **pod_cidr,service_cidr,cluster_dns, and cluster_api_server**
+
 It is no need to change these variables unless both CIDRs overlap your host network. Once `service_cidr` changed, assure that `cluster_dns` and `cluster_api_server` are in the subnet `service_cidr` defined.
 
 ## Playbook
