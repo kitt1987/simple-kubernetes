@@ -1,3 +1,4 @@
+#FIXME verify existence of docker
 - name: Install docker repository
   include_tasks: install-docker-repo-for-ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
