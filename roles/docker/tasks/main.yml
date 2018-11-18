@@ -1,20 +1,8 @@
-#FIXME verify existence of docker
-- name: Install docker repository
-  include_tasks: install-docker-repo-for-ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
+- name: Check docker
+  shell: docker info
+  register: docker_state
+  ignore_errors: yes
 
-- name: Install docker repository
-  include_tasks: install-docker-repo-for-centos.yml
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
-
-- name: Install Docker
-  package:
-    name: docker-ce
-    state: present
-
-- name: Enable docker service
-  systemd:
-    name: docker.service
-    state: restarted
-    enabled: yes
-    daemon_reload: yes
+- name: Install docker
+  include_tasks: enable-docker.yml
+  when: docker_state is failed

@@ -1,0 +1,50 @@
+- name: Check GitHub project
+  fail:
+    msg: "Should specify the full URL of the GitHub project through variable 'github_project'. e.g. https://github.com/kitt1987/simple-kubernetes"
+  when: github_project is not defined or github_project == ""
+
+- name: Check the asset name pattern
+  fail:
+    msg: "Should specify the name pattern regex of the asset to download through variable 'github_asset_name_pattern'."
+  when: github_asset_name_pattern is not defined or github_asset_name_pattern == ""
+
+- name: Check the local asset path
+  fail:
+    msg: "Should specify the local file path to the asset downloaded through variable 'github_asset_local_path'."
+  when: github_asset_local_path is not defined or github_asset_local_path == ""
+
+- name: Fetch releases from {{ github_project }}
+  uri:
+    url: "https://api.github.com/repos{{ github_project | urlsplit('path') }}/releases"
+    body_format: json
+    return_content: yes
+  register: github_releases
+
+- name: Figure out the latest release of {{ github_project }}
+  set_fact:
+    github_latest_release: "{{ github_releases.json | selectattr('prerelease', 'equalto', False) | sort(reverse=True, attribute='created_at') | first }}"
+
+- debug:
+    msg: "the latest release of {{ github_project }} is {{ github_latest_release.name }}"
+
+- name: Figure out the matched asset in {{ github_latest_release.name }} of {{ github_project }}
+  set_fact:
+    github_asset: "{{ github_latest_release.assets | selectattr('name', 'match', github_asset_name_pattern) | sort(reverse=True, attribute='created_at') | first }}"
+
+- fail:
+    msg: "No asset matched {{ github_asset_name_pattern }}"
+  when: github_asset == ""
+
+- name: Download {{ github_asset.name }} from {{ github_project }}
+  get_url:
+    url: "{{ github_asset.browser_download_url }}"
+    dest: "{{ github_asset_local_path }}"
+
+#- name: Check the asset on disks
+#  stat:
+#    path: "{{ github_asset_local_path }}"
+#  register: release_state
+#
+#- debug:
+#    msg: "Downloading assets"
+#  when: release_state.stat.exists == False

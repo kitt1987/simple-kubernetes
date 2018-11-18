@@ -1,14 +1,28 @@
 - name: Check Kubernetes release package on the disk
   stat:
-    path: "{{ playbook_dir }}/kube-release/kubernetes-server-linux-amd64.tar.gz"
-  register: release_state
+    path: "{{ kube_release_local }}"
+    checksum_algorithm: sha512
+  register: local_release
+
+- name: Get digest of server release of Kubernetes {{ kube_release_version }}
+  uri:
+    url: "https://dl.k8s.io/{{ kube_release_version }}/kubernetes-server-linux-amd64.tar.gz.sha512"
+    return_content: yes
+  register: release_digest
+  when: verify_kube_release and local_release.stat.exists
+
+- name: Delete stale Kubernetes release
+  file:
+    state: absent
+    path: "{{ kube_release_local }}"
+  when: verify_kube_release and local_release.stat.exists and release_digest != local_release.stat.checksum
 
 - debug:
     msg: "Downloading kubernetes release package of {{ kube_release_version }}"
-  when: release_state.stat.exists == False
+  when: not local_release.stat.exists or (verify_kube_release and release_digest != local_release.stat.checksum)
 
 - name: Download Kubernetes release package
   get_url:
-    url: https://dl.k8s.io/{{ kube_release_version }}/kubernetes-server-linux-amd64.tar.gz
-    dest: "{{ playbook_dir }}/kube-release/kubernetes-server-linux-amd64.tar.gz"
-  when: release_state.stat.exists == False
+    url: "https://dl.k8s.io/{{ kube_release_version }}/kubernetes-server-linux-amd64.tar.gz"
+    dest: "{{ kube_release_local }}"
+  when: not local_release.stat.exists or (verify_kube_release and release_digest != local_release.stat.checksum)

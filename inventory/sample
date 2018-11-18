@@ -17,8 +17,18 @@ master
 nodes
 
 [all:vars]
-kube_release_version=v1.12.0
-etcd_version=v3.2.18
+# kube_release_version=v1.12.2
+verify_kube_release = False
+etcd_image = quay.io/coreos/etcd:v3.2.18
+coredns_image = coredns/coredns:1.2.6
+
+kube_release_local = {{ playbook_dir }}/releases/kubernetes-server-linux-amd64.tar.gz
+cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz
+docker_remote_centos = https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.09.0-3.el7.x86_64.rpm
+docker_local_centos = {{ playbook_dir }}/releases/docker.rpm
+
+docker_remote_ubuntu = https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_18.09.0~3-0~ubuntu-xenial_amd64.deb
+docker_local_ubuntu = {{ playbook_dir }}/releases/docker.dep
 
 pod_cidr=10.20.0.0/16
 service_cidr=10.21.0.0/16

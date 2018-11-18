@@ -26,6 +26,7 @@
 
 - name: Install CoreDNS
   shell: |
+    [ "{{ coredns_image }}" != "" ] && sed -i 's|image:.*$|image: {{ coredns_image }}|' coredns.yaml.sed
     ./deploy.sh -s -i {{ cluster_dns }} | kubectl apply -f -
     rm -f coredns.yaml.sed deploy.sh
   args:

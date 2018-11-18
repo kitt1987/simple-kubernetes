@@ -1,7 +1,7 @@
 - name: Replicate kube-proxy manifests
   template:
     src: kube-proxy.yml.j2
-    dest: "{{ manifest_path }}/kube-proxy.yml"
+    dest: "/tmp/kube-proxy.yml"
 
 - name: Create SA for kube-proxy
   shell: kubectl create sa kube-proxy -n kube-system --dry-run -o yaml | kubectl apply -f -
@@ -10,4 +10,4 @@
   shell: kubectl create clusterrolebinding kube-proxy --clusterrole=system:node-proxier --serviceaccount=kube-system:kube-proxy --dry-run -o yaml | kubectl apply -f -
 
 - name: Install kube-proxy
-  shell: kubectl apply -f {{manifest_path}}/kube-proxy.yml
+  shell: kubectl apply -f /tmp/kube-proxy.yml

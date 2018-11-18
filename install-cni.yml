@@ -1,0 +1,15 @@
+- name: Prepare cni plugins
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: cni
+      tasks_from: prepare
+  vars:
+    ansible_connection: local
+
+- name: Install cni plugins
+  hosts: kubernetes_nodes
+  tasks:
+  - import_role:
+      name: cni
+      tasks_from: install

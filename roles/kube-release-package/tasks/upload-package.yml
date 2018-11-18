@@ -5,6 +5,6 @@
 
 - name: Upload kubernestes release package to nodes
   copy:
-    src: "{{ playbook_dir }}/kube-release/"
+    src: "{{ kube_release_local }}"
     dest: "{{ remote_app_path }}"
     force: no

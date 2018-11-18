@@ -1,0 +1,10 @@
+- name: Upload cni plugins to nodes
+  copy:
+    src: "{{ cni_plugins_local }}"
+    dest: "/tmp"
+    force: no
+
+- name: Install cni plugins
+  shell: |
+    mkdir -p /opt/cni/bin
+    tar zxf /tmp/cni-plugins-amd64.tgz -C /opt/cni/bin

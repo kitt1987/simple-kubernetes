@@ -21,6 +21,10 @@
     name: rsync
     state: present
 
-- name: Add Repository for CentOS
-  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+- name: Download docker rpm
+  get_url:
+    url: "{{ docker_remote_centos }}"
+    dest: "{{ docker_local_centos }}"
 
+- name: Install docker
+  shell: "yum localinstall -y {{ docker_local_centos }}"

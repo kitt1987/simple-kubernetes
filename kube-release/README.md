@@ -1,1 +1,0 @@
-Simple Kubernetes will download server-side binaries of Kubernetes release and save it here, e.g., from https://dl.k8s.io/v1.12.0/kubernetes-server-linux-amd64.tar.gz .  You can also download the package manually.

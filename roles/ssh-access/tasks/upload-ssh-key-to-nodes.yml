@@ -5,8 +5,7 @@
 
 - name: Trust the key
   shell: |
-    export existedKey=`grep simple-kubernetes`
-    if [ -z "${existedKey}" ]; then
+    if [ -z "$(grep simple-kubernetes authorized_keys)" ]; then
       chmod 0400 kube-node-ssh-key
       cat kube-node-ssh-key.pub >> authorized_keys
     fi

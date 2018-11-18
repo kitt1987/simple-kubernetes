@@ -7,13 +7,13 @@
 
 - name: Save Initial Kubernetes version
   set_fact:
-    kube_release_version: "0.0.0"
+    kube_release_version: "v0.0.0"
 
 - name: Save Kubernetes version
   set_fact:
     kube_release_version: "{{ item }}"
   when: item is version(kube_release_version, '>')
-  with_items: "{{ kubernetes_rel_resp.json | map(attribute='name') | select('match','^((?!rc)(?!alpha)(?!beta).)*$') | list }}"
+  with_items: "{{ kubernetes_rel_resp.json | selectattr('prerelease', 'equalto', False) | map(attribute='name') | list }}"
 
 - name: Save Kubernetes version for each node
   set_fact:

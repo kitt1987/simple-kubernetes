@@ -1,0 +1,16 @@
+- name: Install docker repository
+  include_tasks: install-docker-repo-for-ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+  any_errors_fatal: true
+
+- name: Install docker repository
+  include_tasks: install-docker-repo-for-centos.yml
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+  any_errors_fatal: true
+
+- name: Enable docker service
+  systemd:
+    name: docker.service
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
