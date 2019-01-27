@@ -1,0 +1,6 @@
+- name: Install Python2 for Ubuntu
+  hosts: kubernetes_nodes
+  tasks:
+  - import_role:
+      name: common
+      tasks_from: detect-python

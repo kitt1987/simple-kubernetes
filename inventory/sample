@@ -40,8 +40,6 @@ ansible_connection=local
 
 [kubernetes_nodes:vars]
 ansible_user=root
-# Replace with ansible_python_interpreter=/usr/bin/python on CentOS/RHEL
-ansible_python_interpreter=/usr/bin/python3
 
 pki_path=/etc/kubernetes/pki
 csr_path=/etc/kubernetes/csr

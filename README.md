@@ -35,10 +35,6 @@ You can copy and paste a new inventory from inventory/sample. The critical part 
 
 You can also set the version of Kubernetes you would like to install. Or, the program will choose the latest release.
 
-**ansible_python_interpreter**
-
-If your hosts are CentOS or RHEL, you should set this variable to `/usr/bin/python`.
-
 **pod_cidr,service_cidr,cluster_dns, and cluster_api_server**
 
 It is no need to change these variables unless both CIDRs overlap your host network. Once `service_cidr` changed, assure that `cluster_dns` and `cluster_api_server` are in the subnet `service_cidr` defined.

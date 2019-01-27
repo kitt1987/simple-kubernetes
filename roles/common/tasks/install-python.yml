@@ -1,0 +1,6 @@
+- name: Install Python2 for Ubuntu
+  raw: "{{ item }}"
+  loop:
+    - sudo apt-get update
+    - sudo apt-get -y install python-minimal
+  ignore_errors: yes

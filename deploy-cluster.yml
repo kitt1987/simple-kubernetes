@@ -1,3 +1,4 @@
+- import_playbook: init-python.yml
 - import_playbook: disclose-hostname.yml
 - import_playbook: install-ssh-key.yml
 - import_playbook: install-docker.yml
