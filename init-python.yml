@@ -1,5 +1,6 @@
 - name: Install Python2 for Ubuntu
   hosts: kubernetes_nodes
+  gather_facts: no
   tasks:
   - import_role:
       name: common
