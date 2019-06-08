@@ -1,0 +1,6 @@
+- name: API server endpoint initial
+  hosts: kubernetes_nodes
+  tasks:
+  - import_role:
+      name: api-server
+      tasks_from: endpoint

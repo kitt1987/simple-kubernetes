@@ -3,22 +3,42 @@
     path: "{{ manifest_path }}"
     state: directory
 
-- name: Replicate etcd manifests
+- name: Initial etcd peer list
+  set_fact:
+    etcd_peer_url_list: []
+
+- name: Collect etcd peer URLs
+  set_fact:
+    etcd_peer_url_list: "{{etcd_peer_url_list}} + ['{{hostvars[item]['inventory_hostname']}}=https://{{hostvars[item]['ansible_host']}}:2380']"
+  with_items: "{{ groups['master'] }}"
+
+- name: Initial etcd peers
+  set_fact:
+    etcd_peers: "{{ etcd_peer_url_list | join(',') }}"
+
+- debug:
+    msg: "etcd_peers: {{etcd_peers}}"
+
+- name: Replicate the manifest of etcd
   template:
     src: etcd.yml.j2
     dest: "{{ manifest_path }}/etcd.yml"
 
-- name: Replicate api-server manifests
+- name: Replicate the manifest of api-server
   template:
     src: kube-apiserver.yml.j2
     dest: "{{ manifest_path }}/kube-apiserver.yml"
 
-- name: Replicate controller-manager manifests
+- name: Replicate the manifest of controller-manager
   template:
     src: kube-controller-manager.yml.j2
     dest: "{{ manifest_path }}/kube-controller-manager.yml"
 
-- name: Replicate kube-scheduler manifests
+- name: Replicate the manifest of kube-scheduler
   template:
     src: kube-scheduler.yml.j2
     dest: "{{ manifest_path }}/kube-scheduler.yml"
+
+- name: Install LB for API Server
+  include_tasks: apiserver-lb.yml
+  when: apiserver_vip is defined

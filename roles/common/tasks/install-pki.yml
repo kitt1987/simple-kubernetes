@@ -1,0 +1,9 @@
+- name: Make sure the PKI directoriy exists
+  file:
+    path: "{{ pki_path }}"
+    state: directory
+
+- name: Install CAs
+  copy:
+    src: "{{ local_pki_path }}/"
+    dest: "{{ pki_path }}/"

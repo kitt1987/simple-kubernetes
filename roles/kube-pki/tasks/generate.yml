@@ -3,11 +3,6 @@
     path: "{{ pki_path }}"
     state: directory
 
-- name: Make sure the CSR directoriy exists
-  file:
-    path: "{{ csr_path }}"
-    state: directory
-
 - name: Generate CA for kubernetes
   include_tasks: ../../common/tasks/ca.yml
   vars:
@@ -23,3 +18,13 @@
     ca_csr: "{{ kube_front_proxy_ca_csr }}"
     ca: "{{ kube_front_proxy_ca_crt }}"
     cn: kubernetes_front_proxy_ca
+
+- name: Generate certificate for service account
+  include_tasks: ../../common/tasks/signed-certificate.yml
+  vars:
+    ca: "{{ kube_ca_crt }}"
+    ca_key: "{{ kube_ca_key }}"
+    cert_key: "{{ service_account_cert_key }}"
+    cert_csr: "{{ service_account_cert_csr }}"
+    cert: "{{ service_account_cert_crt }}"
+    cn: system:kube-controller-manager

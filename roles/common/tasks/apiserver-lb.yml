@@ -1,0 +1,41 @@
+- name: Prepare configuration
+  file:
+    path: "{{ ha_home }}"
+    state: directory
+
+- name: Sync haproxy configuration
+  template:
+    src: haproxy.conf.j2
+    dest: "{{ ha_home }}/haproxy.cfg"
+
+- name: Fix haproxy configuration
+  shell: |
+    echo "    server {{item}} {{item}}:6443 check" >> {{ ha_home }}/haproxy.cfg
+  with_inventory_hostnames:
+    - master
+
+- name: Sync haproxy manifest
+  template:
+    src: haproxy-manifest.yml.j2
+    dest: /etc/kubernetes/manifests/haproxy.yml
+
+- name: Initial API server backends list
+  set_fact:
+    api_server_backends_list: []
+
+- name: Generate API server backends
+  set_fact:
+    api_server_backends_list: "{{api_server_backends_list}} + ['{{hostvars[item]['ansible_host']}}']"
+  with_items: "{{ groups['master'] }}"
+
+- name: Initial API server backends
+  set_fact:
+    api_server_backends: "{{ api_server_backends_list | join(',') }}"
+
+- debug:
+    msg: "api_server_backends: {{api_server_backends}}"
+
+- name: Sync keepalived manifest
+  template:
+    src: keepalived-manifest.yml.j2
+    dest: /etc/kubernetes/manifests/keepalived.yml

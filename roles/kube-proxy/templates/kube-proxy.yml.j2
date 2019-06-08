@@ -1,3 +1,4 @@
+#FIXME set local endpoint for kube proxy on masters
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,7 +12,7 @@ data:
     kind: KubeProxyConfiguration
     clientConnection:
       kubeconfig: /var/lib/kube-proxy/kubeconfig.conf
-    clusterCIDR: 10.20.0.0/16
+    clusterCIDR: {{ pod_cidr }}
     proxyMode: ipvs
     resourceContainer: /kube-proxy
   kubeconfig.conf: |-
@@ -20,7 +21,7 @@ data:
     clusters:
     - cluster:
         certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        server: https://{{ inventory_hostname }}:6443
+        server: {{ apiserver_endpoint }}
       name: default
     contexts:
     - context:

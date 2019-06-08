@@ -1,0 +1,7 @@
+- name: Initialize API server endpoint for single master cluster
+  include_tasks: single-master-endpoint.yml
+  when: apiserver_vip is not defined
+
+- name: Initialize API server endpoint for HA cluster
+  include_tasks: ha-endpoint.yml
+  when: apiserver_vip is defined

@@ -1,0 +1,8 @@
+- name: Verify number of masters in a HA cluster
+  fail:
+    msg: "You should define at least 3 masters in a HA cluster"
+  when: "{{ groups['master'] | length < 3}}"
+
+- name: Set remote path to kubernetes installer
+  set_fact:
+    apiserver_endpoint: "https://{{ apiserver_vip }}:8443"

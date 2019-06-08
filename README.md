@@ -29,7 +29,7 @@ The program also need to download some binaries and images. Some of them could b
 * coredns/coredns from Docker Hub and its configuration from GitHub
 
 ## Inventory
-You can copy and paste a new inventory from inventory/sample. The critical part is to specify master and nodes. You may also change some variables to make the program compatible with your environment, which are,
+You can copy and paste a new inventory from `inventory/sample`. The critical part is to specify master and nodes. You may also change some variables to make the program compatible with your environment, which are,
 
 **kube_release_version**
 
@@ -43,5 +43,6 @@ It is no need to change these variables unless both CIDRs overlap your host netw
 - [x] Install compatible Docker automatically
 - [x] Modify /etc/hosts to make hosts know each other if no DNS
 - [x] Figure out the latest Kubernetes release from Github
-- [ ] Install HA clusters
 - [x] Support CNI
+- [ ] Install HA clusters
+- [ ] Add nodes
