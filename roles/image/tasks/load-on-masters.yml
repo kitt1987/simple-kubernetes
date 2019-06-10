@@ -1,0 +1,8 @@
+- name: Try to load images for etcd
+  shell: |
+    docker pull {{ etcd_image }}
+
+- name: Try to load images for CoreDNS
+  shell: |
+    docker pull {{ coredns_image }}
+  when: install_coredns

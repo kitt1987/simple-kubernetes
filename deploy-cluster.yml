@@ -3,6 +3,7 @@
 - import_playbook: install-ssh-key.yml
 - import_playbook: init-apiserver-endpoint.yml
 - import_playbook: install-docker.yml
+- import_playbook: load-image.yml
 - import_playbook: install-cni.yml
 - import_playbook: install-kube-release.yml
 - import_playbook: deploy-master.yml
