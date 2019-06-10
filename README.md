@@ -35,14 +35,14 @@ You can copy and paste a new inventory from `inventory/sample`. The critical par
 
 You can also set the version of Kubernetes you would like to install. Or, the program will choose the latest release.
 
-**pod_cidr,service_cidr,cluster_dns, and cluster_api_server**
+**pod_cidr and service_cidr**
 
-It is no need to change these variables unless both CIDRs overlap your host network. Once `service_cidr` changed, assure that `cluster_dns` and `cluster_api_server` are in the subnet `service_cidr` defined.
+It is no need to change these variables unless both CIDRs overlap your host network.
 
 ## Things haven't done
 - [x] Install compatible Docker automatically
 - [x] Modify /etc/hosts to make hosts know each other if no DNS
 - [x] Figure out the latest Kubernetes release from Github
 - [x] Support CNI
-- [ ] Install HA clusters
+- [x] Install HA clusters
 - [ ] Add nodes

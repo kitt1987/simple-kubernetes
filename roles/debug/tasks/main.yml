@@ -1,0 +1,2 @@
+- debug:
+    msg: "api_server: {{ service_cidr | ipaddr('1') | ipv4('address') }}, dns: {{ service_cidr | ipaddr('10') | ipv4('address') }}"

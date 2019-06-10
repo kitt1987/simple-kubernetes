@@ -7,7 +7,7 @@
     cert_csr: "{{ apiserver_cert_csr }}"
     cert: "{{ apiserver_cert_crt }}"
     cn: kube-apiserver
-    san: "{{ apiserver_vip }},{{ inventory_hostname }},{{ ansible_default_ipv4.address }},{{ cluster_api_server }},localhost,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local"
+    san: "{{ apiserver_vip }},{{ inventory_hostname }},{{ ansible_default_ipv4.address }},{{ service_cidr | ipaddr('1') | ipv4('address') }},localhost,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local"
 
 - name: Generate certificate for kubelet client
   include_tasks: ../../common/tasks/signed-certificate.yml
