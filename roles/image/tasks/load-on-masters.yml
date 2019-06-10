@@ -1,6 +1,8 @@
-- name: Try to load images for etcd
+- name: Try to load images
   shell: |
     docker pull {{ etcd_image }}
+    docker pull osixia/keepalived:1.4.5
+    docker pull haproxy:1.7-alpine
 
 - name: Try to load images for CoreDNS
   shell: |

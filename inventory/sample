@@ -17,31 +17,29 @@ master
 nodes
 
 [all:vars]
-#FIXME kube_release_version should be well detected if a local release existed
-kube_release_version=v1.12.2
+kube_release_version = v1.12.2
 verify_kube_release = False
-etcd_image = quay.io/coreos/etcd:v3.2.18
-apiserver_vip = 10.38.1.225
-
-#FIXME discard unnecessary extracting
-#FIXME Image preload
-
-install_coredns = yes
-coredns_image = coredns/coredns:1.2.6
-
 kube_release_local = {{ playbook_dir }}/releases/kubernetes-server-linux-amd64.tar.gz
 cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz
 
-install_docker = yes
+pod_cidr=10.20.0.0/16
+service_cidr=10.21.0.0/16
+apiserver_vip = 10.38.1.225
+
+keepalived_interface=enp0s3
+
+etcd_image = quay.io/coreos/etcd:v3.2.18
+
+install_coredns = True
+coredns_image = coredns/coredns:1.2.6
+
+pod_infra_container_image = kubernetes/pause:latest
+
+install_docker = True
 docker_remote_centos = https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.09.0-3.el7.x86_64.rpm
 docker_local_centos = {{ playbook_dir }}/releases/docker.rpm
 docker_remote_ubuntu = https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_18.09.0~3-0~ubuntu-xenial_amd64.deb
 docker_local_ubuntu = {{ playbook_dir }}/releases/docker.dep
-
-pod_cidr=10.20.0.0/16
-service_cidr=10.21.0.0/16
-cluster_dns=10.21.0.10
-cluster_api_server=10.21.0.1
 
 [localhost:vars]
 ansible_connection=local
@@ -70,9 +68,6 @@ service_account_cert_csr="{{ pki_path }}/service-account-csr.pem"
 
 [kubernetes_nodes:vars]
 ansible_user=root
-
-#FIXME detect the Primary NIC
-primary_nic=enp0s3
 
 local_pki_path={{ playbook_dir }}/pki
 pki_path=/etc/kubernetes/pki

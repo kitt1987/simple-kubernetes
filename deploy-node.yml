@@ -6,7 +6,7 @@
       tasks_from: create-dir-kubelet
 
 - name: Install configuration for kubelet
-  hosts: master
+  hosts: master[0]
   tasks:
   - import_role:
       name: api-server
@@ -23,7 +23,7 @@
       tasks_from: common
 
 - name: Set node labels
-  hosts: master
+  hosts: master[0]
   tasks:
   - import_role:
       name: common

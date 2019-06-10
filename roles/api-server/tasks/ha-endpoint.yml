@@ -6,3 +6,7 @@
 - name: Set remote path to kubernetes installer
   set_fact:
     apiserver_endpoint: "https://{{ apiserver_vip }}:8443"
+
+- name: Set Keepalived Router ID
+  set_fact:
+    keepalived_router_id: "{{ 255 | random }}"

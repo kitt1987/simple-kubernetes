@@ -16,17 +16,17 @@ spec:
     image: osixia/keepalived:1.4.5
     env:
     - name: KEEPALIVED_VIRTUAL_IPS
-      value: {{apiserver_vip}}
+      value: {{ apiserver_vip }}
     - name: KEEPALIVED_INTERFACE
-      value: {{primary_nic}}
+      value: {{ keepalived_interface }}
     - name: KEEPALIVED_UNICAST_PEERS
-      value: "#PYTHON2BASH:[{{api_server_backends}}]"
+      value: "#PYTHON2BASH:[{{ api_server_backends }}]"
     - name: KEEPALIVED_PASSWORD
       value: d0cker
     - name: KEEPALIVED_PRIORITY
       value: "100"
     - name: KEEPALIVED_ROUTER_ID
-      value: "51"
+      value: "{{ keepalived_router_id }}"
     resources:
       requests:
         cpu: 100m

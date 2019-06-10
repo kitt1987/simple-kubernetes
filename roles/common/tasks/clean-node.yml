@@ -1,3 +1,11 @@
+- name: Stop kubelet service
+  systemd:
+    name: kubelet.service
+    state: stopped
+    enabled: no
+    daemon_reload: yes
+  ignore_errors: yes
+
 - name: Clean Kubernetes systemd unit
   file:
     path: /etc/systemd/system/kubelet.service

@@ -28,6 +28,8 @@
     KUBECONFIG=/etc/kubernetes/admin.conf kubectl config set-credentials admin --client-key {{ admin_cert_key }} --client-certificate {{ admin_cert_crt }} --embed-certs
     KUBECONFIG=/etc/kubernetes/admin.conf kubectl config set-context default-system --cluster default-cluster --user admin
     KUBECONFIG=/etc/kubernetes/admin.conf kubectl config use-context default-system
+    mkdir -p /root/.kube
+    cp -fp /etc/kubernetes/admin.conf /root/.kube/config
 
 - name: Make sure remote path exists
   file:
