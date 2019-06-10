@@ -3,6 +3,11 @@
   register: docker_state
   ignore_errors: yes
 
+- name: Fail on lack of Docker
+  fail:
+    msg: "Docker is required!"
+  when: docker_state is failed and not install_docker
+
 - name: Install docker
   include_tasks: enable-docker.yml
   when: docker_state is failed

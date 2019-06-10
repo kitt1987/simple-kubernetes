@@ -1,34 +1,3 @@
-- name: Download CoreDNS manifest
-  get_url:
-    url: https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/coredns.yaml.sed
-    dest: "/tmp/coredns.yaml.sed"
-
-- name: Download CoreDNS bootstrap
-  get_url:
-    url: https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/deploy.sh
-    dest: "/tmp/deploy.sh"
-    mode: 0755
-
-- name: Install epel for CentOS
-  package:
-    name: epel-release
-    state: present
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
-
-- name: Update yum repo
-  shell: yum makecache -y
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
-
-- name: Install jq for CoreDNS bootstrap
-  package:
-    name: jq
-    state: present
-
-- name: Install CoreDNS
-  shell: |
-    [ "{{ coredns_image }}" != "" ] && sed -i 's|image:.*$|image: {{ coredns_image }}|' coredns.yaml.sed
-    ./deploy.sh -s -i {{ cluster_dns }} | kubectl apply -f -
-    rm -f coredns.yaml.sed deploy.sh
-  args:
-    chdir: /tmp
-    executable: /bin/bash
+- name: Install CoreDNS from GitHub
+  include_tasks: install-from-github.yml
+  when: install_coredns
