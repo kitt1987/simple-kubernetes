@@ -1,0 +1,6 @@
+- name: Generate PKI
+  hosts: localhost
+  roles:
+  - debug
+  vars:
+    ansible_connection: local

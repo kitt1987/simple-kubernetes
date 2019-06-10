@@ -13,15 +13,17 @@ spec:
   - command:
     - etcd
     - --data-dir=/var/lib/etcd
-    - --listen-client-urls=https://127.0.0.1:2379
-    - --advertise-client-urls=https://127.0.0.1:2379
-    - --listen-peer-urls=https://127.0.0.1:2380
-    - --initial-advertise-peer-urls=https://127.0.0.1:2380
-    - --initial-cluster=default=https://127.0.0.1:2380
+    - --listen-client-urls=https://{{ ansible_host }}:2379
+    - --advertise-client-urls=https://{{ ansible_host }}:2379
+    - --listen-peer-urls=https://{{ ansible_host }}:2380
+    - --initial-advertise-peer-urls=https://{{ ansible_host }}:2380
+    - --name={{ inventory_hostname }}
+    - --initial-cluster={{ etcd_peers }}
+    - --initial-cluster-state=new
     - --trusted-ca-file=/etc/pki/etcd-ca.pem
     - --peer-trusted-ca-file=/etc/pki/etcd-ca.pem
-    - --cert-file=/etc/pki/kube-etcd-server.pem
-    - --key-file=/etc/pki/kube-etcd-server-key.pem
+    - --cert-file=/etc/pki/kube-etcd-server-{{ inventory_hostname }}.pem
+    - --key-file=/etc/pki/kube-etcd-server-{{ inventory_hostname }}-key.pem
     - --peer-client-cert-auth=true
     - --peer-cert-file=/etc/pki/etcd-peer-{{ inventory_hostname }}.pem
     - --peer-key-file=/etc/pki/etcd-peer-{{ inventory_hostname }}-key.pem
@@ -32,7 +34,7 @@ spec:
       exec:
         command:
         - etcdctl
-        - --endpoints=https://localhost:2379
+        - --endpoints=https://{{ ansible_host }}:2379
         - --cert-file=/etc/pki/etcd-healthcheck-client.pem
         - --key-file=/etc/pki/etcd-healthcheck-client-key.pem
         - --ca-file=/etc/pki/etcd-ca.pem

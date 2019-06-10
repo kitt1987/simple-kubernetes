@@ -18,7 +18,7 @@ spec:
     - --use-service-account-credentials=true
     - --kubeconfig=/etc/kubernetes/kube-controller-manager.conf
     - --root-ca-file=/etc/kubernetes/pki/kube-ca.pem
-    - --service-account-private-key-file=/etc/kubernetes/pki/kube-api-server-key.pem
+    - --service-account-private-key-file=/etc/kubernetes/pki/service-account-key.pem
     - --cluster-signing-cert-file=/etc/kubernetes/pki/kube-api-server.pem
     - --cluster-signing-key-file=/etc/kubernetes/pki/kube-api-server-key.pem
     - --allocate-node-cidrs=true

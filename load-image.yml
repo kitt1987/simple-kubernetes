@@ -1,0 +1,6 @@
+- name: Load images
+  hosts: master
+  tasks:
+  - import_role:
+      name: image
+      tasks_from: load-on-masters

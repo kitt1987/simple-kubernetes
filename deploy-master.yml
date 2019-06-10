@@ -1,8 +1,34 @@
+- name: Generate PKI
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: kube-pki
+      tasks_from: generate
+  vars:
+    ansible_connection: local
+
+- name: Generate PKI for etcd
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: etcd
+      tasks_from: generate-ca
+  vars:
+    ansible_connection: local
+
 - name: Install PKI
   hosts: master
-  roles:
-    - kube-pki
-    - etcd
+  tasks:
+  - import_role:
+      name: common
+      tasks_from: install-pki
+
+- name: Generate Certificates for etcd
+  hosts: master
+  tasks:
+  - import_role:
+      name: etcd
+      tasks_from: generate-cert
 
 - name: Install manifests
   hosts: master
@@ -21,9 +47,13 @@
       name: kubelet
       tasks_from: common
 
-- name: Install api-server, kube-proxy and coredns
+- name: Install api-server
   hosts: master
   roles:
     - api-server
+
+- name: Install kube-proxy and coredns
+  hosts: master[0]
+  roles:
     - kube-proxy
     - coredns
