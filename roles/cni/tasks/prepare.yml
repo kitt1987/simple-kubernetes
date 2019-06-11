@@ -1,7 +1,7 @@
 - name: Prepare cni plugins
   set_fact:
     github_project: https://github.com/containernetworking/plugins
-    github_asset_name_pattern: "^cni-plugins-amd64-.+\\.tgz$"
+    github_asset_name_pattern: "^cni-plugins(-linux)?-amd64-.+\\.tgz$"
     github_asset_local_path: "{{ cni_plugins_local }}"
 
 - name: Check cni plugins on disks
