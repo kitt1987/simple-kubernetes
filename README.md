@@ -18,6 +18,8 @@ Or, clean an installation.
 
 Simple Kubernetes is an Ansible playbook. You need to install Ansible 2.7 on your workstation.
 
+**Jinja2**
+
 **GitHub, Docker Hub and Quay.io**
 
 The program also need to download some binaries and images. Some of them could be quite slow. If you are in **MainLand China**, I strongly recommand you download binaries manually, and specify alternatives you've downloaded in the inventory file. 
@@ -29,6 +31,7 @@ The program also need to download some binaries and images. Some of them could b
 * coredns/coredns from Docker Hub and its configuration from GitHub
 
 **rsync**
+
 **jq**
 
 ## Inventory
@@ -56,3 +59,4 @@ A virtual IP is required for the API Server if a high available cluster is about
 - [x] Install HA clusters
 - [ ] Save all the downloaded files for the next installation
 - [ ] Support bootstrap token
+- [ ] Install main stream CNI plugin

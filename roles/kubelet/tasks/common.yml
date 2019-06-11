@@ -3,8 +3,27 @@
     swapoff -a
     echo 0 > /proc/sys/vm/swappiness
     sed -ri  's/^[^#]\S+\s+none\s+swap\s+/# &/' /etc/fstab
+    sed -ri  's/^[^#]\S+\s+swap\s+swap\s+/# &/' /etc/fstab
   args:
     executable: /bin/bash
+  ignore_errors: yes
+
+- name: Disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+  ignore_errors: yes
+
+- name: Disable SeLinux
+  shell: |
+    setenforce 0
+    sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+  args:
+    executable: /bin/bash
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+  ignore_errors: yes
 
 - name: Set hostname
   shell: hostnamectl set-hostname {{ inventory_hostname }}

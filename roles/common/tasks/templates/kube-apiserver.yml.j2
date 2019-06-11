@@ -29,7 +29,7 @@ spec:
     - --proxy-client-cert-file=/etc/kubernetes/pki/kube-front-proxy-client.pem
     - --proxy-client-key-file=/etc/kubernetes/pki/kube-front-proxy-client-key.pem
     - --admission-control=Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota
-    - --enable-bootstrap-token-auth=true
+    - --enable-bootstrap-token-auth
     - --advertise-address=0.0.0.0
     - --authorization-mode=Node,RBAC
     - --etcd-servers=https://{{ ansible_host }}:2379
