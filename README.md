@@ -60,3 +60,4 @@ A virtual IP is required for the API Server if a high available cluster is about
 - [ ] Save all the downloaded files for the next installation
 - [ ] Support bootstrap token
 - [ ] Install main stream CNI plugin
+- [ ] Divergent manifests for different releases

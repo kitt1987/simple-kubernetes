@@ -15,7 +15,7 @@ spec:
     - --address=127.0.0.1
     - --leader-elect=true
     - --kubeconfig=/etc/kubernetes/kube-scheduler.conf
-    image: gcr.io/google_containers/kube-scheduler:{{ kube_release_version }}
+    image: k8s.gcr.io/kube-scheduler:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:
