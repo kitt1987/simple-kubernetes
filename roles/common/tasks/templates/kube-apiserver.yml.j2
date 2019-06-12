@@ -38,7 +38,7 @@ spec:
     - --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client-key.pem
     - --service-account-key-file=/etc/kubernetes/pki/service-account.pem
     - --feature-gates=DynamicKubeletConfig=true
-    image: gcr.io/google_containers/kube-apiserver:{{ kube_release_version }}
+    image: k8s.gcr.io/kube-apiserver:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:
