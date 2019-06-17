@@ -6,14 +6,13 @@
     for tar in *.tar; do
       docker load -i ${tar}
     done
-    tar zxf kubernetes-server-linux-amd64.tar.gz
+    [[ ! -d kubernetes/server/bin ]] && tar zxf kubernetes-server-linux-amd64.tar.gz
     pushd kubernetes/server/bin > /dev/null
     for tar in *.tar; do
       docker load -i ${tar}
     done
     cp kubeadm kubectl kubelet /usr/local/bin
     popd > /dev/null
-    rm -rf kubernetes-server-linux-amd64.tar.gz kube-dns.tar.gz kubernetes
   args:
     chdir: "{{ remote_app_path }}"
     executable: /bin/bash

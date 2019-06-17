@@ -1,0 +1,13 @@
+- name: Check docker configuration
+  stat:
+    path: /var/run/docker.sock
+  register: docker
+  delegate_to: localhost
+
+- name: Pull {{ image }}
+  include_tasks: image-local.yml
+  when: docker.stat.exists
+
+- name: Pull {{ image }}
+  include_tasks: image-remote.yml
+  when: not docker.stat.exists

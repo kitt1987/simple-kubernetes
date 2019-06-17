@@ -1,0 +1,3 @@
+- name: Pull {{ image }}
+  shell: |
+    docker pull {{ image }}

@@ -1,0 +1,24 @@
+- name: Prepare cache directory
+  file:
+    path: "{{ local_cache_path }}"
+    state: directory
+  delegate_to: localhost
+
+- name: Check local {{ url | basename }}
+  stat:
+    path: "{{ local_cache_path }}/{{ url | basename }}"
+  register: local_cache
+  delegate_to: localhost
+
+- name: Download {{ url | basename }}
+  get_url:
+    url: "{{ url }}"
+    dest: "{{ local_cache_path }}/{{ url | basename }}"
+  when: not local_cache.stat.exists
+  delegate_to: localhost
+
+- name: Upload {{ url | basename }}
+  copy:
+    src: "{{ local_cache_path }}/{{ url | basename }}"
+    dest: "{{ dest }}"
+    force: no
