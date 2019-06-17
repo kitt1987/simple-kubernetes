@@ -1,3 +1,12 @@
+- name: Install rsync for CentOS
+  package:
+    name: rsync
+    state: present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+  delegate_to: "{{ item }}"
+  with_inventory_hostnames:
+  - kubernetes_nodes
+
 - name: Sync certificate
   synchronize:
     src: "{{ remote_kubelet_certs_path }}/kubelet-{{ item }}.config"
@@ -6,4 +15,4 @@
     private_key: /root/.ssh/kube-node-ssh-key
   delegate_to: "{{ item }}"
   with_inventory_hostnames:
-    - nodes
+  - nodes

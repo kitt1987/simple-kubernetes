@@ -1,10 +1,19 @@
-- name: Try to load images
-  shell: |
-    docker pull {{ etcd_image }}
-    docker pull osixia/keepalived:1.4.5
-    docker pull haproxy:1.7-alpine
+- name: Load image {{ etcd_image }}
+  include_tasks: ../../cache/tasks/image.yml
+  vars:
+    image: "{{ etcd_image }}"
 
-- name: Try to load images for CoreDNS
-  shell: |
-    docker pull {{ coredns_image }}
-  when: install_coredns
+- name: Load image osixia/keepalived:1.4.5
+  include_tasks: ../../cache/tasks/image.yml
+  vars:
+    image: osixia/keepalived:1.4.5
+
+- name: Load image osixia/keepalived:1.4.5
+  include_tasks: ../../cache/tasks/image.yml
+  vars:
+    image: haproxy:1.7-alpine
+
+- name: Load image images for CoreDNS
+  include_tasks: ../../cache/tasks/image.yml
+  vars:
+    image: "{{ coredns_image }}"

@@ -1,0 +1,22 @@
+- name: Check local image {{ image }}
+  stat:
+    path: "{{ local_cache_path }}/{{ image | basename }}.tar"
+  delegate_to: localhost
+  register: local_image
+
+- name: Pull {{ image }}
+  shell: |
+    docker pull {{ image }}
+    docker save {{ image }} -o {{ local_cache_path }}/{{ image | basename }}.tar
+  when: not local_image.stat.exists
+  delegate_to: localhost
+
+- name: Upload {{ image }}
+  copy:
+    src: "{{ local_cache_path }}/{{ image | basename }}.tar"
+    dest: "/tmp/{{ image | basename }}.tar"
+    force: no
+
+- name: Load {{ image }}
+  shell: |
+    docker load -i /tmp/{{ image | basename }}.tar
