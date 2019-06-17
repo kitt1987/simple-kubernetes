@@ -57,7 +57,7 @@ A virtual IP is required for the API Server if a high available cluster is about
 - [x] Figure out the latest Kubernetes release from Github
 - [x] Support CNI
 - [x] Install HA clusters
-- [ ] Save all the downloaded files for the next installation
+- [x] Save all the downloaded files for the next installation
 - [ ] Support bootstrap token
 - [ ] Install main stream CNI plugin
 - [ ] Divergent manifests for different releases
