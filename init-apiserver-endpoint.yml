@@ -1,6 +1,8 @@
 - name: API server endpoint initial
-  hosts: kubernetes_nodes
+  hosts: localhost
   tasks:
   - import_role:
       name: api-server
       tasks_from: endpoint
+  vars:
+    ansible_connection: local

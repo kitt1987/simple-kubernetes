@@ -12,8 +12,3 @@
   include_tasks: ../../cache/tasks/image.yml
   vars:
     image: haproxy:1.7-alpine
-
-- name: Load image images for CoreDNS
-  include_tasks: ../../cache/tasks/image.yml
-  vars:
-    image: "{{ coredns_image }}"

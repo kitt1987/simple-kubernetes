@@ -5,5 +5,8 @@
 
 - name: Set remote path to kubernetes installer
   set_fact:
-    apiserver_endpoint: "https://{{ hostvars[item]['ansible_host'] }}:6443"
-  with_items: "{{ groups['master'] }}"
+    apiserver_endpoint: "https://{{ groups['master'][0][item]['ansible_host'] }}:6443"
+  delegate_facts: True
+  delegate_to: "{{ item }}"
+  with_inventory_hostnames:
+    - kubernetes_nodes
