@@ -1,11 +1,11 @@
 [master]
 # Specify the IP address if no DNS
-m1.no.ha.lab.io ansible_host=10.38.1.13
-m2.no.ha.lab.io ansible_host=10.38.1.14
-m3.no.ha.lab.io ansible_host=10.38.1.15
+m1.ha.env.lab.io ansible_host=10.38.1.13
+m2.ha.env.lab.io ansible_host=10.38.1.14
+m3.ha.env.lab.io ansible_host=10.38.1.15
 
 [nodes]
-n1.no.ha.lab.io ansible_host=10.38.1.16
+n1.ha.env.lab.io ansible_host=10.38.1.16
 #n1.no.weave.lab.io
 #n2.no.weave.lab.io
 
@@ -17,21 +17,19 @@ master
 nodes
 
 [all:vars]
-kube_release_version = v1.12.2
+kube_release_version = v1.12.9
 verify_kube_release = False
 kube_release_local = {{ playbook_dir }}/releases/kubernetes-server-linux-amd64.tar.gz
 cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz
 
-pod_cidr=10.20.0.0/16
-service_cidr=10.21.0.0/16
+pod_cidr = 10.20.0.0/16
+service_cidr = 10.21.0.0/16
 apiserver_vip = 10.38.1.225
-
-keepalived_interface=enp0s3
 
 etcd_image = quay.io/coreos/etcd:v3.2.18
 
 install_coredns = True
-coredns_image = coredns/coredns:1.2.6
+coredns_image = coredns/coredns:1.5.0
 
 pod_infra_container_image = kubernetes/pause:latest
 
@@ -40,6 +38,11 @@ docker_remote_centos = https://download.docker.com/linux/centos/7/x86_64/stable/
 docker_local_centos = {{ playbook_dir }}/releases/docker.rpm
 docker_remote_ubuntu = https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_18.09.0~3-0~ubuntu-xenial_amd64.deb
 docker_local_ubuntu = {{ playbook_dir }}/releases/docker.dep
+
+cni_plugin = weave-net
+
+network_activity_timeout = 60 # in secs
+local_cache_path = {{ playbook_dir }}/on-prem-cache
 
 [localhost:vars]
 ansible_connection=local
@@ -81,9 +84,6 @@ etcd_ca_csr="{{ pki_path }}/etcd-ca-csr.pem"
 kube_front_proxy_ca_key="{{ pki_path }}/kube-front-proxy-ca-key.pem"
 kube_front_proxy_ca_crt="{{ pki_path }}/kube-front-proxy-ca.pem"
 kube_front_proxy_ca_csr="{{ pki_path }}/kube-front-proxy-ca-csr.pem"
-#etcd_cert_key="{{ pki_path }}/kube-etcd-server-key.pem"
-#etcd_cert_crt="{{ pki_path }}/kube-etcd-server.pem"
-#etcd_cert_csr="{{ pki_path }}/kube-etcd-server-csr.pem"
 etcd_health_check_cert_key="{{ pki_path }}/etcd-healthcheck-client-key.pem"
 etcd_health_check_cert_crt="{{ pki_path }}/etcd-healthcheck-client.pem"
 etcd_health_check_cert_csr="{{ pki_path }}/etcd-healthcheck-client-csr.pem"
