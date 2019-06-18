@@ -1,0 +1,4 @@
+- name: Load image {{ pod_infra_container_image }}
+  include_tasks: ../../cache/tasks/image.yml
+  vars:
+    image: "{{ pod_infra_container_image }}"

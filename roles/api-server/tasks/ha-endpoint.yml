@@ -1,7 +1,12 @@
+- name: Verify VIP of masters
+  fail:
+    msg: "apiserver_vip is required"
+  when: apiserver_vip is not defined
+
 - name: Verify number of masters in a HA cluster
   fail:
     msg: "You should define at least 3 masters in a HA cluster"
-  when: "{{ groups['master'] | length < 3}}"
+  when: "{{ groups['master'] | length < 3 }}"
 
 - name: Set remote path to kubernetes installer
   set_fact:
