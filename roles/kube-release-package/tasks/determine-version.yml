@@ -19,7 +19,7 @@
   set_fact:
     kube_release_version: "{{ kube_release_version }}"
   delegate_facts: True
-  delegate_to: "{{item}}"
+  delegate_to: "{{ item }}"
   with_inventory_hostnames:
     - kubernetes_nodes
 

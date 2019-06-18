@@ -25,7 +25,7 @@
   set_fact:
     resolve_in_hosts: True
   delegate_facts: True
-  delegate_to: "{{item}}"
+  delegate_to: "{{ item }}"
   with_inventory_hostnames:
     - kubernetes_nodes
   when: resolve_in_hosts is defined
