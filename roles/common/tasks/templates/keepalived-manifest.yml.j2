@@ -18,7 +18,7 @@ spec:
     - name: KEEPALIVED_VIRTUAL_IPS
       value: {{ apiserver_vip }}
     - name: KEEPALIVED_INTERFACE
-      value: {{ keepalived_interface }}
+      value: {{ keepalived_interface.stdout }}
     - name: KEEPALIVED_UNICAST_PEERS
       value: "#PYTHON2BASH:[{{ api_server_backends }}]"
     - name: KEEPALIVED_PASSWORD

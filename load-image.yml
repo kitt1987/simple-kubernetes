@@ -4,3 +4,10 @@
   - import_role:
       name: image
       tasks_from: load-on-masters
+
+- name: Load images
+  hosts: kubernetes_nodes
+  tasks:
+  - import_role:
+      name: image
+      tasks_from: load-on-all

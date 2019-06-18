@@ -39,6 +39,11 @@
     src: kube-scheduler.yml.j2
     dest: "{{ manifest_path }}/kube-scheduler.yml"
 
+- name: Figure out the primary NIC
+  shell: |
+    ip r | grep default | awk '{ print $5 }'
+  register: keepalived_interface
+
 - name: Install LB for API Server
   include_tasks: apiserver-lb.yml
   when: apiserver_vip is defined
