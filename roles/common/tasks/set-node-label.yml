@@ -1,5 +1,9 @@
 - name: Generate config for kubelet
   shell: |
     kubectl label no {{ item }} --overwrite node-role.kubernetes.io/node=
+  register: healthy
+  until: healthy is succeeded
+  retries: 10
+  delay: 2
   with_inventory_hostnames:
     - nodes

@@ -1,0 +1,18 @@
+- name: Download CoreDNS manifest
+  include_tasks: ../../cache/tasks/http-file.yml
+  vars:
+    url: "https://cloud.weave.works/k8s/net?k8s-version={{ kube_release_version }}"
+    dest: "/tmp/weave-net.yml"
+
+- name: Figure images out
+  shell: |
+    grep image: '{{ local_cache_path }}/net?k8s-version={{ kube_release_version }}' | awk '{ print substr($2,2,length($2)-2) }'
+  delegate_to: localhost
+  register: weave_image_list
+
+- name: Sync weave images
+  include_tasks: ../../cache/tasks/image.yml
+  vars:
+    image: "{{ item }}"
+  with_items:
+    - "{{ weave_image_list.stdout_lines }}"
