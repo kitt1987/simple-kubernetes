@@ -1,0 +1,6 @@
+- name: Install WeaveNet
+  shell: |
+    kubectl apply -f /tmp/weave-net.yml
+    kubectl set env ds weave-net -n kube-system --containers="weave" IPALLOC_RANGE={{ pod_cidr }}
+  args:
+    executable: /bin/bash

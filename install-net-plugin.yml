@@ -1,0 +1,13 @@
+- name: Prepare resources
+  hosts: kubernetes_nodes
+  tasks:
+  - import_role:
+      name: net-plugin
+      tasks_from: prepare
+
+- name: Install network plugin
+  hosts: master[0]
+  tasks:
+  - import_role:
+      name: net-plugin
+      tasks_from: install

@@ -8,3 +8,4 @@
 - import_playbook: install-kube-release.yml
 - import_playbook: deploy-master.yml
 - import_playbook: deploy-node.yml
+- import_playbook: install-net-plugin.yml
