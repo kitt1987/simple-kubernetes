@@ -1,7 +1,7 @@
 - name: Verify number of masters in a single master cluster
   fail:
     msg: "You should define only 1 master in a single master cluster"
-  when: "{{ groups['master'] | length > 1}}"
+  when: "{{ groups['master'] | length > 1 }}"
 
 - name: Set remote path to kubernetes installer
   set_fact:
