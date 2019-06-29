@@ -1,13 +1,12 @@
 [master]
-# Specify the IP address if no DNS
+# When more than 2 masters specified, a HA cluster will be installed.
 m1.ha.env.lab.io ansible_host=10.38.1.13
 m2.ha.env.lab.io ansible_host=10.38.1.14
 m3.ha.env.lab.io ansible_host=10.38.1.15
 
 [nodes]
 n1.ha.env.lab.io ansible_host=10.38.1.16
-#n1.no.weave.lab.io
-#n2.no.weave.lab.io
+n2.ha.env.lab.io ansible_host=10.38.1.17
 
 [localhost]
 localhost
@@ -17,32 +16,48 @@ master
 nodes
 
 [all:vars]
+# The version of K8S to be installed which should be same to the release on GitHub.
 kube_release_version = v1.12.9
-verify_kube_release = False
-kube_release_local = {{ playbook_dir }}/releases/kubernetes-server-linux-amd64.tar.gz
-cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz
 
+# If sets to True, simple-kube will compare the checksum of local cached tarball to the release on GitHub.
+# If check failed, simple-kube will download a new release from GitHub.
+verify_kube_release = False
+
+# CIDR of the Pod network
 pod_cidr = 10.20.0.0/16
+
+# CIDR of the Service network
 service_cidr = 10.21.0.0/16
+
+# The virtual IP of kube-apiserver for a HA cluster
 apiserver_vip = 10.38.1.225
 
+# The image for etcd
 etcd_image = quay.io/coreos/etcd:v3.2.18
 
+# Determine whether to install CoreDNS as the default DNS component and the image for CoreDNS.
 install_coredns = True
 coredns_image = coredns/coredns:1.5.0
 
+# The image of the pause container
 pod_infra_container_image = kubernetes/pause:latest
 
+# Determine whether to install Docker and where to download packages
 install_docker = True
 docker_remote_centos = https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.09.0-3.el7.x86_64.rpm
 docker_local_centos = {{ playbook_dir }}/releases/docker.rpm
 docker_remote_ubuntu = https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_18.09.0~3-0~ubuntu-xenial_amd64.deb
 docker_local_ubuntu = {{ playbook_dir }}/releases/docker.dep
 
+# Specify CNI plugin to be installed. Only weave-net supported now.
 cni_plugin = weave-net
 
+# Timeout for installing package from official repositories
 network_activity_timeout = 60 # in secs
+
 local_cache_path = {{ playbook_dir }}/on-prem-cache
+kube_release_local = {{ playbook_dir }}/releases/kubernetes-server-linux-amd64.tar.gz
+cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz
 
 [localhost:vars]
 ansible_connection=local
