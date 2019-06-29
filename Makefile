@@ -2,7 +2,7 @@
 
 # auto-generated
 TAG := $(shell git rev-parse HEAD)-$(shell date +'%Y%m%d%H%M%S')
-IMAGE_NAME := kh/simple-kube
+IMAGE_NAME := kitt0hsu/simple-kube
 
 default: image
 
