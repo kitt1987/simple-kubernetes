@@ -8,7 +8,7 @@
 
 To run the playbook without any preparation,
 
-`docker run -n simple-kube -ti --rm -v /var/run/docker.sock:/var/run/docker.sock kitt0hsu/simple-kube`
+`docker run --name simple-kube -ti --rm -v /var/run/docker.sock:/var/run/docker.sock kitt0hsu/simple-kube`
 
 It is optional to mount the Docker socket to the container.  See remaining sections.
 

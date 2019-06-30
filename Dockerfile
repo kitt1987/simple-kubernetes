@@ -7,3 +7,4 @@ WORKDIR /simple-kube
 ARG BUILD
 LABEL VERSION $BUILD
 COPY . /simple-kube/
+CMD ["bash"]
