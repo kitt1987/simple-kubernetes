@@ -8,7 +8,9 @@
 
 To run the playbook without any preparation,
 
-`bash <(curl -sL https://raw.githubusercontent.com/kitt1987/simple-kubernetes/master/run/simple-kube.sh)`
+```
+bash <(curl -sL https://raw.githubusercontent.com/kitt1987/simple-kubernetes/master/run/simple-kube.sh)
+```
 
 It is optional to mount the Docker socket to the container.  See remaining sections.
 
@@ -18,11 +20,15 @@ We've generated an SSH key pair in the container. You can install it on hosts ou
 
 To install a cluster,
 
-`ansible-playbook -i inventory/sample deploy-cluster.yml`
+```
+ansible-playbook -i inventory/sample deploy-cluster.yml
+```
 
 To clean an installation,
 
-`ansible-playbook -i inventory/sample clean-cluster.yml`
+```
+ansible-playbook -i inventory/sample clean-cluster.yml
+```
 
 Once failures arose before installation get done, clean the cluster would restore stale hosts.
 
@@ -32,7 +38,9 @@ In on-premise environments, `simple-kube` can't download images or configuration
 
 Once you mount the local Docker socket `/var/run/docker.sock` to the `simple-kube` container, it will cache all the downloaded images and configurations in the container after the first complete installation. Then, you can commit the container and use the new image on-prem.
 
-`docker commit -m "kubernetes version v1.12.9" -p simple-kube kitt0hsu/simple-kube:v1.12.9`
+```
+docker commit -m "kubernetes version v1.12.9" -p simple-kube kitt0hsu/simple-kube:v1.12.9
+```
 
 ## Dependencies
 
