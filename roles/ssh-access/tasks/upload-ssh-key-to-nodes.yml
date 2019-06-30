@@ -5,9 +5,8 @@
 
 - name: Trust the key
   shell: |
-    if [ -z "$(grep simple-kubernetes authorized_keys)" ]; then
-      chmod 0400 kube-node-ssh-key
-      cat kube-node-ssh-key.pub >> authorized_keys
-    fi
+    sed -i '/simple-kubernetes/d' authorized_keys
+    chmod 0400 kube-node-ssh-key
+    cat kube-node-ssh-key.pub >> authorized_keys
   args:
     chdir: /root/.ssh

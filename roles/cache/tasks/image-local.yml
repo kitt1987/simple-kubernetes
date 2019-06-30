@@ -1,3 +1,9 @@
+- name: Prepare cache directory
+  file:
+    path: "{{ local_cache_path }}"
+    state: directory
+  delegate_to: localhost
+
 - name: Check local image {{ image }}
   stat:
     path: "{{ local_cache_path }}/{{ image | basename }}.tar"
