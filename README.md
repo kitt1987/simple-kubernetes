@@ -32,7 +32,7 @@ ansible-playbook -i inventory/sample clean-cluster.yml
 
 Once failures arose before installation get done, clean the cluster would restore stale hosts.
 
-### Resources cache for completely on-premium hosts
+### Resources cache for completely on-premise hosts
 
 In on-premise environments, `simple-kube` can't download images or configurations from the Internet. `simple-kube` provides a simple way to collect and cache these resources. 
 
