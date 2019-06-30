@@ -8,7 +8,7 @@
 
 To run the playbook without any preparation,
 
-`curl -sL https://raw.githubusercontent.com/kitt1987/simple-kubernetes/master/run/simple-kube.sh | sudo bash -`
+`bash <(curl -sL https://raw.githubusercontent.com/kitt1987/simple-kubernetes/master/run/simple-kube.sh)`
 
 It is optional to mount the Docker socket to the container.  See remaining sections.
 
