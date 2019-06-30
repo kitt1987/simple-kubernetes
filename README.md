@@ -8,21 +8,21 @@
 
 To run the playbook without any preparation,
 
-`docker run --name simple-kube -ti --rm -v /var/run/docker.sock:/var/run/docker.sock kitt0hsu/simple-kube`
+`curl -sL https://raw.githubusercontent.com/kitt1987/simple-kubernetes/master/run/simple-kube.sh | sudo bash -`
 
 It is optional to mount the Docker socket to the container.  See remaining sections.
 
 ## Run the playbook
 
-We've generated an SSH key pair in the container. You can install it on hosts outlined in the inventory. 
+We've generated an SSH key pair in the container. You can install it on hosts outlined in the inventory. Or, generate your key pairs for security. 
 
 To install a cluster,
 
-`ansible-playbook -i sample/inventory deploy-cluster.yml`
+`ansible-playbook -i inventory/sample deploy-cluster.yml`
 
 To clean an installation,
 
-`ansible-playbook -i sample/inventory clean-cluster.yml`
+`ansible-playbook -i inventory/sample clean-cluster.yml`
 
 Once failures arose before installation get done, clean the cluster would restore stale hosts.
 
@@ -60,7 +60,8 @@ Once you mount the local Docker socket `/var/run/docker.sock` to the `simple-kub
 - [x] Support CNI
 - [x] Install HA clusters
 - [x] Save all the downloaded files for the next installation
-- [ ] Support HTTP_PROXY environment variables in the playbook and container
+- [x] Support HTTP_PROXY environment variables in the playbook and container
 - [ ] Support bootstrap token
 - [ ] Install main stream CNI plugin
 - [ ] Divergent manifests for different releases
+- [ ] Parse coredns image from its configuration

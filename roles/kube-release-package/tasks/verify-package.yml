@@ -15,14 +15,14 @@
   file:
     state: absent
     path: "{{ kube_release_local }}"
-  when: verify_kube_release and local_release.stat.exists and release_digest != local_release.stat.checksum
+  when: verify_kube_release and local_release.stat.exists and ((release_digest.content | trim) != local_release.stat.checksum)
 
 - debug:
     msg: "Downloading kubernetes release package of {{ kube_release_version }}"
-  when: not local_release.stat.exists or (verify_kube_release and release_digest != local_release.stat.checksum)
+  when: verify_kube_release and local_release.stat.exists and ((release_digest.content | trim) != local_release.stat.checksum)
 
 - name: Download Kubernetes release package
   get_url:
     url: "https://dl.k8s.io/{{ kube_release_version }}/kubernetes-server-linux-amd64.tar.gz"
     dest: "{{ kube_release_local }}"
-  when: not local_release.stat.exists or (verify_kube_release and release_digest != local_release.stat.checksum)
+  when: verify_kube_release and local_release.stat.exists and ((release_digest.content | trim) != local_release.stat.checksum)

@@ -16,12 +16,12 @@ master
 nodes
 
 [all:vars]
-# The version of K8S to be installed which should be same to the release on GitHub.
-kube_release_version = v1.12.9
+# The version of K8S to be installed which should be same to the release on GitHub. The latest version is used if not specified.
+# kube_release_version = v1.12.9
 
 # If sets to True, simple-kube will compare the checksum of local cached tarball to the release on GitHub.
 # If check failed, simple-kube will download a new release from GitHub.
-verify_kube_release = False
+verify_kube_release = True
 
 # CIDR of the Pod network
 pod_cidr = 10.20.0.0/16
