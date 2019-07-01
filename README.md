@@ -46,7 +46,7 @@ docker commit -m "kubernetes version v1.12.9" -p simple-kube kitt0hsu/simple-kub
 
 ### From the Internet
 
-`simple-kube` will download some binaries and images. Some of them could be quite slow. In **MainLand China**, I strongly recommend you download the binaries below manually, and specify the substitutes in the inventory. 
+`simple-kube` will download binaries and images. Some of them could be quite slow. In **MainLand China**, I strongly recommend you download binaries below manually, and specify them in the inventory. 
 
 * Kubernetes releases from https://github.com/kubernetes/kubernetes and https://dl.k8s.io
 * CNI plugins releases from https://github.com/containernetworking/plugins
