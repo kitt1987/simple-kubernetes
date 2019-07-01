@@ -3,9 +3,12 @@
     msg: "You should define only 1 master in a single master cluster"
   when: "{{ groups['master'] | length > 1 }}"
 
+- debug:
+    msg: "https://{{ groups['master'][0] }}:6443"
+
 - name: Set remote path to kubernetes installer
   set_fact:
-    apiserver_endpoint: "https://{{ groups['master'][0][item]['ansible_host'] }}:6443"
+    apiserver_endpoint: "https://{{ groups['master'][0] }}:6443"
   delegate_facts: True
   delegate_to: "{{ item }}"
   with_inventory_hostnames:
