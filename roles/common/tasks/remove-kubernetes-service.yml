@@ -1,0 +1,2 @@
+- name: Drop kubernetes service
+  shell: kubectl delete svc kubernetes

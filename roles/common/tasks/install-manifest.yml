@@ -21,22 +21,22 @@
 
 - name: Replicate the manifest of etcd
   template:
-    src: etcd.yml.j2
+    src: "manifests/etcd.yml.j2"
     dest: "{{ manifest_path }}/etcd.yml"
 
 - name: Replicate the manifest of api-server
   template:
-    src: kube-apiserver.yml.j2
+    src: "{{ k8s_manifest_template }}/kube-apiserver.yml.j2"
     dest: "{{ manifest_path }}/kube-apiserver.yml"
 
 - name: Replicate the manifest of controller-manager
   template:
-    src: kube-controller-manager.yml.j2
+    src: "{{ k8s_manifest_template }}/kube-controller-manager.yml.j2"
     dest: "{{ manifest_path }}/kube-controller-manager.yml"
 
 - name: Replicate the manifest of kube-scheduler
   template:
-    src: kube-scheduler.yml.j2
+    src: "{{ k8s_manifest_template }}/kube-scheduler.yml.j2"
     dest: "{{ manifest_path }}/kube-scheduler.yml"
 
 - name: Figure out the primary NIC

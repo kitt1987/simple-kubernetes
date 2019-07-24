@@ -1,0 +1,8 @@
+- name: API server endpoint initial
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: common
+      tasks_from: init-manifest-template-path
+  vars:
+    ansible_connection: local

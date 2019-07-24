@@ -1,0 +1,23 @@
+- name: Prepare backup destination
+  file:
+    path: "/root/.simple-kube"
+    state: directory
+
+- name: Backup kubernetes files
+  shell: |
+    target=/root/.simple-kube/k8s-backup-$(date +%Y%m%d%H%M%S)
+    mkdir -p ${target}
+
+    if [[ -d "/etc/kubernetes" ]]; then
+      cp -rpf /etc/kubernetes ${target}
+    fi
+
+    if [[ -f "/etc/systemd/system/kubelet.service" ]]; then
+      cp -rp /etc/systemd/system/kubelet.service ${target}
+    fi
+
+    if [[ -d "/etc/systemd/system/kubelet.service.d" ]]; then
+      cp -rp /etc/systemd/system/kubelet.service.d ${target}
+    fi
+  args:
+    executable: /bin/bash
