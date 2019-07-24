@@ -9,7 +9,7 @@
     [[ ! -d kubernetes/server/bin ]] && tar zxf kubernetes-server-linux-amd64.tar.gz
     pushd kubernetes/server/bin > /dev/null
     docker load -i kube-proxy.tar
-    cp kubeadm kubectl kubelet /usr/local/bin
+    cp kubeadm kubectl kubelet /usr/bin
     popd > /dev/null
   args:
     chdir: "{{ remote_app_path }}"

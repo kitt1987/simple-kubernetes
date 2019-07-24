@@ -5,7 +5,7 @@
 
 - name: Sync haproxy configuration
   template:
-    src: haproxy.conf.j2
+    src: "manifests/haproxy.conf.j2"
     dest: "{{ ha_home }}/haproxy.cfg"
 
 - name: Fix haproxy configuration
@@ -16,7 +16,7 @@
 
 - name: Sync haproxy manifest
   template:
-    src: haproxy-manifest.yml.j2
+    src: "manifests/haproxy-manifest.yml.j2"
     dest: /etc/kubernetes/manifests/haproxy.yml
 
 - name: Initial API server backends list
@@ -37,5 +37,5 @@
 
 - name: Sync keepalived manifest
   template:
-    src: keepalived-manifest.yml.j2
+    src: "manifests/keepalived-manifest.yml.j2"
     dest: /etc/kubernetes/manifests/keepalived.yml

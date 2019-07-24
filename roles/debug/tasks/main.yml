@@ -1,15 +1,2 @@
-- name: Initial API server backends list
-  set_fact:
-    api_server_backends_list: []
-
-- name: Generate API server backends
-  set_fact:
-    api_server_backends_list: "{{api_server_backends_list}} + ['{{hostvars[item]['ansible_host']}}']"
-  with_items: "{{ groups['master'] }}"
-
-- name: Initial API server backends
-  set_fact:
-    api_server_backends: "{{ api_server_backends_list | join(',') }}"
-
 - debug:
-    msg: "api_server_backends: {{api_server_backends}}"
+    msg: "manifests/{{ kube_release_version | regex_replace('^(v[\\d]+\\.[\\d]+).*', '\\1') }}"

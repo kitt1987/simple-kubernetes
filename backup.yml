@@ -1,0 +1,13 @@
+- name: Backup K8S files
+  hosts: kubernetes_nodes
+  tasks:
+    - import_role:
+        name: backup
+        tasks_from: k8s
+
+- name: Backup Etcd data
+  hosts: master
+  tasks:
+    - import_role:
+        name: backup
+        tasks_from: etcd

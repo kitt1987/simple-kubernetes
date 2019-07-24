@@ -1,0 +1,15 @@
+- name: Prepare backup destination
+  file:
+    path: "/root/.simple-kube"
+    state: directory
+
+- name: Backup Etcd data
+  shell: |
+    target=/root/.simple-kube/etcd-backup-$(date +%Y%m%d%H%M%S)
+    mkdir -p ${target}
+
+    if [[ -d "/var/lib/etcd" ]]; then
+      cp -rp /var/lib/etcd ${target}/
+    fi
+  args:
+    executable: /bin/bash

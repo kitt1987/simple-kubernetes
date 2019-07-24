@@ -42,6 +42,18 @@ Once you mount the local Docker socket `/var/run/docker.sock` to the `simple-kub
 docker commit -m "kubernetes version v1.12.9" -p simple-kube kitt0hsu/simple-kube:v1.12.9
 ```
 
+## Advanced Features
+
+### Change Pod/Service CIDR
+
+Before running the playbook, make sure hostnames, their IP addresses and the K8s version in the inventory exactly match your cluster.
+
+```
+ansible-playbook -i inventory/sample apply-cidrs.yml
+```
+
+After the playbook done successfully, your legacy cluster configuration and Etcd data were copied to directory **/root/.simple-kube**. You need to copy the SA certificate back to **/etc/kubernetes/pki** and restore the manifest of kube-apiserver to use the original SA certificate. Meanwhile, all services have to be rebuilt. Moreover, you have to update the configuration of CNI plugin manually.
+
 ## Dependencies
 
 ### From the Internet
