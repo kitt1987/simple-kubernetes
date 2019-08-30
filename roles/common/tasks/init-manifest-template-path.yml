@@ -37,7 +37,7 @@
 
 - name: Check if the particular kubelet configuration for version {{ kube_release_version }} exists
   stat:
-    path: "{{ playbook_dir }}/roles/kubelet/tasks/templates/manifests/{{ major_k8s_version }}"
+    path: "{{ playbook_dir }}/roles/kubelet/tasks/templates/{{ major_k8s_version }}"
   register: particular_kubelet
   when: kube_release_version is defined
 
