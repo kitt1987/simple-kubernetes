@@ -3,9 +3,6 @@
 
 - name: Load images
   shell: |
-    for tar in *.tar; do
-      docker load -i ${tar}
-    done
     [[ ! -d kubernetes/server/bin ]] && tar zxf kubernetes-server-linux-amd64.tar.gz
     pushd kubernetes/server/bin > /dev/null
     for tar in *.tar; do
@@ -13,6 +10,7 @@
     done
     cp kubeadm kubectl kubelet /usr/bin
     popd > /dev/null
+    rm -rf kubernetes
   args:
     chdir: "{{ remote_app_path }}"
     executable: /bin/bash

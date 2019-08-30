@@ -31,3 +31,8 @@
   file:
     path: /etc/kubernetes
     state: absent
+
+- name: Clean Kubernetes release
+  file:
+    path: /root/kubernetes-release
+    state: absent

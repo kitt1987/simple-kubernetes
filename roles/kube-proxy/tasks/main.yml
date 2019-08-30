@@ -1,3 +1,4 @@
+#FIXME versioned manifest for KubeProxy
 - name: Replicate kube-proxy manifests
   template:
     src: kube-proxy.yml.j2

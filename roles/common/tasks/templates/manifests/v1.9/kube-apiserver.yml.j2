@@ -39,7 +39,7 @@ spec:
     - --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.pem
     - --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client-key.pem
     - --feature-gates=DynamicKubeletConfig=true,CustomPodDNS=true
-    image: registry.local/google_containers/kube-apiserver-amd64:{{ kube_release_version }}
+    image: gcr.io/google_containers/kube-apiserver:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:

@@ -21,7 +21,7 @@ spec:
     - --kubeconfig=/etc/kubernetes/kube-controller-manager.conf
     - --cluster-signing-key-file=/etc/kubernetes/pki/kube-api-server-key.pem
     - --address=127.0.0.1
-    image: registry.local/google_containers/kube-controller-manager-amd64:{{ kube_release_version }}
+    image: gcr.io/google_containers/kube-controller-manager:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:
