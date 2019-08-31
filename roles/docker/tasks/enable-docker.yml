@@ -1,12 +1,25 @@
-- name: Install docker repository
-  include_tasks: install-docker-repo-for-ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
-  any_errors_fatal: true
+- name: Download docker release
+  include_tasks: ../../cache/tasks/http-file.yml
+  vars:
+    url: "{{ docker_release_remote }}"
+    dest: "/tmp/docker.tgz"
 
-- name: Install docker repository
-  include_tasks: install-docker-repo-for-centos.yml
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
-  any_errors_fatal: true
+- name: Replicate systemd configuration for docker
+  template:
+    src: docker.socket.j2
+    dest: /etc/systemd/system/docker.socket
+
+- name: Replicate systemd configuration for docker
+  template:
+    src: docker.service.j2
+    dest: /etc/systemd/system/docker.service
+
+- name: Enable docker
+  shell: |
+    tar zxf docker.tgz
+    mv -f docker/* /usr/bin
+  args:
+    chdir: /tmp
 
 - name: Enable docker service
   systemd:
