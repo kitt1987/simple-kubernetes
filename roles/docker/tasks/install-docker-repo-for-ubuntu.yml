@@ -1,7 +1,0 @@
-- name: Download docker deb
-  get_url:
-    url: "{{ docker_remote_ubuntu }}"
-    dest: "{{ docker_local_ubuntu }}"
-
-- name: Install docker
-  shell: "apt install -y {{ docker_local_ubuntu }}"

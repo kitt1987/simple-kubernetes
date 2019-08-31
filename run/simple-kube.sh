@@ -10,4 +10,4 @@ docker run --name simple-kube --net=host -ti --rm \
   -e http_proxy="${http_proxy}" -e https_proxy="${https_proxy}" -e no_proxy="${no_proxy}" \
   --mount type=tmpfs,destination=/root/.ansible-ssh \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  kitt0hsu/simple-kube
+  kitt0hsu/simple-kube:e763dd96bd71660f4a287521457fc55736c7a3cb-20190831223536
