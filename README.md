@@ -32,11 +32,11 @@ ansible-playbook -i inventory/sample clean-cluster.yml
 
 Once failures arose before installation get done, clean the cluster would restore stale hosts.
 
-### Resources cache for completely on-premise hosts
+### Save resources downloaded for completely on-premise hosts
 
-In on-premise environments, `simple-kube` can't download images or configurations from the Internet. `simple-kube` provides a simple way to collect and cache these resources. 
+In on-premise environments, `simple-kube` can't download images or configurations from the Internet. It provides an alternative way to get them. 
 
-Once you mount the local Docker socket `/var/run/docker.sock` to the `simple-kube` container, it will cache all the downloaded images and configurations in the container after the first complete installation. Then, you can commit the container and use the new image on-prem.
+Once you mount the local Docker socket `/var/run/docker.sock` to the `simple-kube` container, it will keep all the downloaded images and configurations in the container after the first complete installation. Then, you can commit the container and use the new image on-prem.
 
 ```
 docker commit -m "kubernetes version v1.12.9" -p simple-kube kitt0hsu/simple-kube:v1.12.9
@@ -73,15 +73,15 @@ After the playbook done successfully, your legacy cluster configuration and Etcd
 * rsync
 * jq
 
-## Things haven't done
+## Feature List
 - [x] Install compatible Docker automatically
 - [x] Modify /etc/hosts to make hosts know each other if no DNS
-- [x] Figure out the latest Kubernetes release from Github
+- [x] Fetch the latest Kubernetes release from Github
 - [x] Support CNI
-- [x] Install HA clusters
-- [x] Save all the downloaded files for the next installation
+- [x] Install HA cluster
+- [x] Save all the downloaded files for following installation
 - [x] Support HTTP_PROXY environment variables in the playbook and container
 - [ ] Support bootstrap token
 - [ ] Install main stream CNI plugin
 - [ ] Divergent manifests for different releases
-- [ ] Parse coredns image from its configuration
+- [ ] Parse coredns image from configuration
