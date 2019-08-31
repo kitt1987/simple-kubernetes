@@ -6,17 +6,13 @@
 
 ### Run simple-kube in container
 
-To run the playbook without any preparation,
-
 ```
 bash <(curl -sL https://raw.githubusercontent.com/kitt1987/simple-kubernetes/master/run/simple-kube.sh)
 ```
 
-It is optional to mount the Docker socket to the container.  See remaining sections.
-
 ## Run the playbook
 
-We've generated an SSH key pair in the container. You can install it on hosts outlined in the inventory. Or, generate your key pairs for security. 
+We've generated an **SSH key pair** in the container. You can install it on hosts outlined in the inventory. Or, generate your key pairs for security. 
 
 To install a cluster,
 
@@ -32,17 +28,21 @@ ansible-playbook -i inventory/sample clean-cluster.yml
 
 Once failures arose before installation get done, clean the cluster would restore stale hosts.
 
-### Save resources downloaded for completely on-premise hosts
+## Advanced Features
 
-In on-premise environments, `simple-kube` can't download images or configurations from the Internet. It provides an alternative way to get them. 
+### Build the ON-PREM version of simple-kube 
 
-Once you mount the local Docker socket `/var/run/docker.sock` to the `simple-kube` container, it will keep all the downloaded images and configurations in the container after the first complete installation. Then, you can commit the container and use the new image on-prem.
+In on-premise environments, `simple-kube` can't download images or configurations from the Internet. It provides an alternative way to build a new simple-kube image which doesn't need to fetch Internet resources. 
+
+1. Run simple-kube by `run/simple-kube.sh` or make sure that `/var/run/docker.sock` is mounted to the container,
+2. Assure that the simple-kube container could access the Internet,
+3. Install a cluster,
+4. Set `kube_release_version` and disable `verify_kube_release` in the inventory,
+4. Commit the container to create a new simple-kube image.
 
 ```
 docker commit -m "kubernetes version v1.12.9" -p simple-kube kitt0hsu/simple-kube:v1.12.9
 ```
-
-## Advanced Features
 
 ### Change Pod/Service CIDR
 
