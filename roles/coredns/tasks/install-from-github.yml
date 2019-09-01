@@ -4,39 +4,24 @@
     url: https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/coredns.yaml.sed
     dest: "/tmp/coredns.yaml.sed"
 
-- name: Download CoreDNS bootstrap
-  include_tasks: ../../cache/tasks/http-file.yml
-  vars:
-    url: https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/deploy.sh
-    dest: "/tmp/deploy.sh"
-
-- name: Install epel for CentOS
-  package:
-    name: epel-release
-    state: present
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
-  async: "{{ network_activity_timeout }}"
-  ignore_errors: yes
-
-- name: Update yum repo
-  shell: yum makecache -y
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
-  async: "{{ network_activity_timeout }}"
-  ignore_errors: yes
-
-- name: Install jq for CoreDNS bootstrap
-  package:
-    name: jq
-    state: present
-  async: "{{ network_activity_timeout }}"
-  ignore_errors: yes
-
 - name: Install CoreDNS
   shell: |
     [ "{{ coredns_image }}" != "" ] && sed -i 's|image:.*$|image: {{ coredns_image }}|' coredns.yaml.sed
-    chmod +x deploy.sh
-    ./deploy.sh -s -i {{ service_cidr | ipaddr('10') | ipv4('address') }} | kubectl apply -f -
-    rm -f coredns.yaml.sed deploy.sh
+    orig=$'\n'
+    replace=$'\\\n'
+    CLUSTER_DNS_IP={{ service_cidr | ipaddr('10') | ipv4('address') }}
+    CLUSTER_DOMAIN=cluster.local
+    REVERSE_CIDRS="in-addr.arpa ip6.arpa"
+    UPSTREAM=\\/etc\\/resolv\.conf
+    sed -e "s/CLUSTER_DNS_IP/$CLUSTER_DNS_IP/g" \
+        -e "s/CLUSTER_DOMAIN/$CLUSTER_DOMAIN/g" \
+        -e "s?REVERSE_CIDRS?$REVERSE_CIDRS?g" \
+        -e "s@STUBDOMAINS@${STUBDOMAINS//$orig/$replace}@g" \
+        -e "s@FEDERATIONS@${FEDERATIONS//$orig/$replace}@g" \
+        -e "s/UPSTREAMNAMESERVER/$UPSTREAM/g" \
+        -i "coredns.yaml.sed"
+    kubectl apply -f coredns.yaml.sed
+    rm -f coredns.yaml.sed
   args:
     chdir: /tmp
     executable: /bin/bash
