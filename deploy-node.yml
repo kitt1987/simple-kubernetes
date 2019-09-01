@@ -10,6 +10,9 @@
   tasks:
   - import_role:
       name: api-server
+      tasks_from: kubelet-cert
+  - import_role:
+      name: api-server
       tasks_from: sync-node-cert
 
 - name: Install kubelet

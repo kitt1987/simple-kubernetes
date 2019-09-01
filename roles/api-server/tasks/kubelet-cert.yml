@@ -1,0 +1,8 @@
+- name: Generate config for kubelet
+  shell: |
+    KUBECONFIG={{ remote_kubelet_certs_path }}/kubelet-{{ item }}.config kubectl config set-cluster default-cluster --server={{ apiserver_endpoint }} --certificate-authority {{ kube_ca_crt }} --embed-certs
+    KUBECONFIG={{ remote_kubelet_certs_path }}/kubelet-{{ item }}.config kubectl config set-credentials system:node:{{ item }} --client-key /etc/kubernetes/pki/kubelet-{{ item }}-key.pem --client-certificate /etc/kubernetes/pki/kubelet-{{ item }}.pem --embed-certs
+    KUBECONFIG={{ remote_kubelet_certs_path }}/kubelet-{{ item }}.config kubectl config set-context default-system --cluster default-cluster --user system:node:{{ item }}
+    KUBECONFIG={{ remote_kubelet_certs_path }}/kubelet-{{ item }}.config kubectl config use-context default-system
+  with_inventory_hostnames:
+    - nodes
