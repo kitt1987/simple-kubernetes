@@ -28,8 +28,6 @@ ansible-playbook -i inventory/sample clean-cluster.yml
 
 Once failures arose before installation get done, clean the cluster would restore stale hosts.
 
-## Add new nodes
-
 To add new nodes,
 
 ```
@@ -79,7 +77,6 @@ After the playbook done successfully, your legacy cluster configuration and Etcd
 `simple-kube`  also installs some packages on hosts while installing clusters. Most of them could be found in the official package repository of each distro. They are,
 
 * rsync
-* jq
 
 ## Feature List
 - [x] Install compatible Docker automatically
@@ -91,4 +88,4 @@ After the playbook done successfully, your legacy cluster configuration and Etcd
 - [x] Support HTTP_PROXY environment variables in the playbook and container
 - [ ] Install main stream CNI plugin
 - [ ] Divergent manifests for different releases
-- [ ] Parse coredns image from configuration
+- [x] Parse coredns image from configuration
