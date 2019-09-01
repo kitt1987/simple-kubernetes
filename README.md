@@ -28,6 +28,14 @@ ansible-playbook -i inventory/sample clean-cluster.yml
 
 Once failures arose before installation get done, clean the cluster would restore stale hosts.
 
+## Add new nodes
+
+To add new nodes,
+
+```
+ansible-playbook -i inventory/sample add-node.yml
+```
+
 ## Advanced Features
 
 ### Build the ON-PREM version of simple-kube 
@@ -81,7 +89,6 @@ After the playbook done successfully, your legacy cluster configuration and Etcd
 - [x] Install HA cluster
 - [x] Save all the downloaded files for following installation
 - [x] Support HTTP_PROXY environment variables in the playbook and container
-- [ ] Support bootstrap token
 - [ ] Install main stream CNI plugin
 - [ ] Divergent manifests for different releases
 - [ ] Parse coredns image from configuration
