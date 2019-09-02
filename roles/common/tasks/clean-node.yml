@@ -20,7 +20,7 @@
   file:
     path: /etc/systemd/system/kubelet.service.d
     state: absent
-c
+
 - name: Clear containers
   shell: |
     docker rm -f `docker ps -a --format "{{ '{{' }}.Names{{ '}}' }}"  | grep -v simple-kube | awk '{ print $1 }'`
