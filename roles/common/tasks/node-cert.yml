@@ -1,6 +1,5 @@
 - name: Generate certificate for kubelet
-  include_role:
-    name: signed-certificate
+  include_tasks: signed-certificate.yml
   vars:
     ca: "{{ kube_ca_crt }}"
     ca_key: "{{ kube_ca_key }}"
@@ -13,5 +12,4 @@
     kubelet_cert_crt: "{{ pki_path }}/kubelet-{{ item }}.pem"
     kubelet_cert_csr: "{{ pki_path }}/kubelet-{{ item }}-csr.pem"
   with_inventory_hostnames:
-    - master
     - nodes

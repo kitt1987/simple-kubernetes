@@ -1,2 +1,3 @@
 - name: Install network plugin
   include_tasks: "{{ cni_plugin }}-install.yml"
+  when: cni_plugin != ""

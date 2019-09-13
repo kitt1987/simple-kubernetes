@@ -1,4 +1,4 @@
-- name: Generate config for kubelet
+- name: Set role label for nodes
   shell: |
     kubectl label no {{ item }} --overwrite node-role.kubernetes.io/node=
   register: healthy

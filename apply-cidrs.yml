@@ -11,6 +11,9 @@
       name: common
       tasks_from: clean-node
 
+- import_playbook: load-image.yml
+- import_playbook: install-cni.yml
+- import_playbook: install-kube-release.yml
 - import_playbook: deploy-master.yml
 - import_playbook: deploy-node.yml
 
