@@ -89,3 +89,4 @@ After the playbook done successfully, your legacy cluster configuration and Etcd
 - [ ] Install main stream CNI plugin
 - [ ] Divergent manifests for different releases
 - [x] Parse coredns image from configuration
+- [ ] Image list for different versions of release

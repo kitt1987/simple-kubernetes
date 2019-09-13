@@ -14,8 +14,17 @@
     src: docker.service.j2
     dest: /etc/systemd/system/docker.service
 
+- name: Disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+  ignore_errors: yes
+
 - name: Enable docker
   shell: |
+    groupadd docker
     tar zxf docker.tgz
     mv -f docker/* /usr/bin
   args:

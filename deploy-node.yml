@@ -9,6 +9,9 @@
   hosts: master[0]
   tasks:
   - import_role:
+      name: common
+      tasks_from: node-cert
+  - import_role:
       name: api-server
       tasks_from: kubelet-cert
   - import_role:
