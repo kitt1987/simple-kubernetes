@@ -10,6 +10,7 @@
   set_fact:
     k8s_manifest_template: "manifests"
     kubelet_conf_template: "default"
+    kubeproxy_template: "default"
   delegate_facts: True
   delegate_to: "{{ item }}"
   with_inventory_hostnames:
@@ -49,3 +50,18 @@
   with_inventory_hostnames:
     - kubernetes_nodes
   when: kube_release_version is defined and particular_kubelet.stat.isdir is defined and particular_kubelet.stat.isdir
+
+- name: Check if the particular kubeproxy configuration for version {{ kube_release_version }} exists
+  stat:
+    path: "{{ playbook_dir }}/roles/kube-proxy/templates/{{ major_k8s_version }}"
+  register: particular_kubeproxy
+  when: kube_release_version is defined
+
+- name: Set path of kubeproxy configuration
+  set_fact:
+    kubeproxy_template: "{{ major_k8s_version }}"
+  delegate_facts: True
+  delegate_to: "{{ item }}"
+  with_inventory_hostnames:
+    - kubernetes_nodes
+  when: kube_release_version is defined and particular_kubeproxy.stat.isdir is defined and particular_kubeproxy.stat.isdir
