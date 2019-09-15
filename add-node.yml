@@ -7,7 +7,6 @@
 - import_playbook: load-image.yml
 - import_playbook: install-cni.yml
 - import_playbook: install-kube-release.yml
-- import_playbook: deploy-node.yml
 
 - name: Prepare resources
   hosts: nodes
@@ -15,3 +14,5 @@
     - import_role:
         name: net-plugin
         tasks_from: prepare
+
+- import_playbook: deploy-node.yml
