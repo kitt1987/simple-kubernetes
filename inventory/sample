@@ -57,6 +57,10 @@ local_cache_path = {{ playbook_dir }}/on-prem-cache
 kube_release_local = {{ playbook_dir }}/releases/kubernetes-server-linux-amd64.tar.gz
 cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz
 
+retry_period_in_seconds = 5
+api_server_first_up_retry_cycle = 50
+node_role_setting_retry_cycle = 10
+
 [localhost:vars]
 ansible_connection=local
 
