@@ -53,6 +53,9 @@ cni_plugin = weave-net
 # Timeout for installing package from official repositories
 network_activity_timeout = 60 # in secs
 
+# Proxy mode for kube-proxy. The value could be one of iptables, ipvs and userspace(deprecated).
+proxy_mode = ipvs
+
 local_cache_path = {{ playbook_dir }}/on-prem-cache
 kube_release_local = {{ playbook_dir }}/releases/kubernetes-server-linux-amd64.tar.gz
 cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz

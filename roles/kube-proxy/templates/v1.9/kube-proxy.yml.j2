@@ -13,7 +13,7 @@ data:
     clientConnection:
       kubeconfig: /var/lib/kube-proxy/kubeconfig.conf
     clusterCIDR: {{ pod_cidr }}
-    proxyMode: ipvs
+    proxyMode: {{ proxy_mode }}
     resourceContainer: /kube-proxy
   kubeconfig.conf: |-
     apiVersion: v1
