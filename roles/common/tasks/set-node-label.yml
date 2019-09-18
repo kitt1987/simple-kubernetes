@@ -3,7 +3,7 @@
     kubectl label no {{ item }} --overwrite node-role.kubernetes.io/node=
   register: healthy
   until: healthy is succeeded
-  retries: node_role_setting_retry_cycle
-  delay: retry_period_in_seconds
+  retries: "{{ node_role_setting_retry_cycle | int }}"
+  delay: "{{ retry_period_in_seconds | int }}"
   with_inventory_hostnames:
     - nodes

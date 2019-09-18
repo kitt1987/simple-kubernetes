@@ -5,8 +5,8 @@
     curl -s -o /dev/null -w "%{http_code}" --cacert {{ kube_ca_crt }} --cert {{ admin_cert_crt }} --key {{ admin_cert_key }} https://127.0.0.1:6443/healthz
   register: healthy
   until: healthy is succeeded and healthy.stdout == "200"
-  retries: api_server_first_up_retry_cycle
-  delay: retry_period_in_seconds
+  retries: "{{ api_server_first_up_retry_cycle | int }}"
+  delay: "{{ retry_period_in_seconds | int }}"
 
 - name: Generate certificate for kube-scheduler
   shell: |
@@ -57,5 +57,5 @@
   shell: kubectl label no {{ inventory_hostname }} --overwrite node-role.kubernetes.io/master=
   register: healthy
   until: healthy is succeeded
-  retries: node_role_setting_retry_cycle
-  delay: retry_period_in_seconds
+  retries: "{{ node_role_setting_retry_cycle | int }}"
+  delay: "{{ retry_period_in_seconds | int }}"

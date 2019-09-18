@@ -45,7 +45,6 @@ pod_infra_container_image = kubernetes/pause:go
 # Determine whether to install Docker and where to download packages
 install_docker = True
 docker_release_remote = https://download.docker.com/linux/static/stable/x86_64/docker-19.03.1.tgz
-docker_release_local = {{ playbook_dir }}/releases/docker.tgz
 
 # Specify CNI plugin to be installed. Only weave-net supported now.
 cni_plugin = weave-net

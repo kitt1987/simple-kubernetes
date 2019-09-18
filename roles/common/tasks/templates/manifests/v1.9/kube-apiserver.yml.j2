@@ -13,6 +13,7 @@ spec:
   - command:
     - kube-apiserver
     - --allow-privileged=true
+    - --endpoint-reconciler-type=lease
     - --service-cluster-ip-range={{ service_cidr }}
     - --service-account-key-file=/etc/kubernetes/pki/service-account.pem
     - --client-ca-file=/etc/kubernetes/pki/kube-ca.pem
