@@ -47,7 +47,7 @@
 
 - name: Generate CNF file
   template:
-    src: cnf.j2
+    src: "cnf-san-{{ san is defined }}.j2"
     dest: "{{ cert }}.cnf"
   when: cnf_state.stat.exists == False
 
