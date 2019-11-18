@@ -47,9 +47,9 @@
 
 - name: Generate CNF file
   template:
-    src: "cnf-san-{{ san is defined }}.j2"
+    src: "cnf-san-{{ san is defined | lower }}.j2"
     dest: "{{ cert }}.cnf"
-  when: cnf_state.stat.exists == False
+  when: not cnf_state.stat.exists
 
 - name: Check certificate file existence
   stat:
@@ -69,8 +69,18 @@
     rm -f {{ cert }}.cnf
     set +e
   register: debug_cert
-  when: cert_state.stat.exists == False or cert_key_state.stat.exists == False
+  when: (not cert_state.stat.exists or not cert_key_state.stat.exists) and san is defined
+
+- name: Generate Certificate and Private Key without SAN
+  shell: |
+    set -e
+    openssl req -out {{ cert_csr }} -new -newkey rsa:4096 -nodes -keyout {{ cert_key }} -config {{ cert }}.cnf
+    openssl x509 -req -days 3650 -in {{ cert_csr }} -CA {{ ca }} -CAkey {{ ca_key }} -CAcreateserial -extfile {{ cert }}.cnf -out {{ cert }} -sha256
+    rm -f {{ cert }}.cnf
+    set +e
+  register: debug_cert
+  when: (not cert_state.stat.exists or not cert_key_state.stat.exists) and san is not defined
   
 - debug:
     msg: "{{ debug_cert }}"
-  when: cert_state.stat.exists == False or cert_key_state.stat.exists == False
+  when: not cert_state.stat.exists or not cert_key_state.stat.exists
