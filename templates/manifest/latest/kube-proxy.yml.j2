@@ -1,4 +1,3 @@
-#FIXME set local endpoint for kube proxy on masters
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -56,7 +55,7 @@ spec:
         - /usr/local/bin/kube-proxy
         - --config=/var/lib/kube-proxy/config.conf
         - --cluster-cidr={{ pod_cidr }}
-        image: gcr.io/google_containers/kube-proxy:{{kube_release_version}}
+        image: kube-proxy:{{ kube_release_version }}
         imagePullPolicy: IfNotPresent
         name: kube-proxy
         securityContext:

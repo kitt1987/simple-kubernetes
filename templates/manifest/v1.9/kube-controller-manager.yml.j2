@@ -12,19 +12,16 @@ spec:
   containers:
   - command:
     - kube-controller-manager
-    - --controllers=*,bootstrapsigner,tokencleaner
-    - --bind-address=127.0.0.1
-    - --leader-elect=true
-    - --use-service-account-credentials=true
-    - --kubeconfig=/etc/kubernetes/kube-controller-manager.conf
-    - --root-ca-file=/etc/kubernetes/pki/kube-ca.pem
     - --service-account-private-key-file=/etc/kubernetes/pki/service-account-key.pem
     - --cluster-signing-cert-file=/etc/kubernetes/pki/kube-api-server.pem
+    - --root-ca-file=/etc/kubernetes/pki/kube-ca.pem
+    - --leader-elect=true
+    - --use-service-account-credentials=true
+    - --controllers=*,bootstrapsigner,tokencleaner
+    - --kubeconfig=/etc/kubernetes/kube-controller-manager.conf
     - --cluster-signing-key-file=/etc/kubernetes/pki/kube-api-server-key.pem
-    - --allocate-node-cidrs
-    - --cluster-cidr={{ pod_cidr }}
-    - --node-cidr-mask-size=24
-    image: k8s.gcr.io/kube-controller-manager:{{ kube_release_version }}
+    - --address=127.0.0.1
+    image: kube-controller-manager:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:
