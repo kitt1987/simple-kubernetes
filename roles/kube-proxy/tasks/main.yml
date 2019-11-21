@@ -1,6 +1,6 @@
 - name: Replicate kube-proxy manifests
   template:
-    src: "{{ kubeproxy_template }}/kube-proxy.yml.j2"
+    src: "{{ k8s_manifest_template }}/kube-proxy.yml.j2"
     dest: "/tmp/kube-proxy.yml"
 
 - name: Create SA for kube-proxy

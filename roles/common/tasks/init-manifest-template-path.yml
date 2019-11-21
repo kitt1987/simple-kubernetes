@@ -1,67 +1,8 @@
 - name: Set path of kubernetes manifest templates
   set_fact:
-    k8s_manifest_template: "manifests"
+    k8s_manifest_template: "{{ playbook_dir }}/templates/manifest/current"
+    systemd_conf_template: "{{ playbook_dir }}/templates/systemd/current"
   delegate_facts: True
   delegate_to: "{{ item }}"
   with_inventory_hostnames:
     - kubernetes_nodes
-
-- name: Set path of kubernetes manifest templates
-  set_fact:
-    k8s_manifest_template: "manifests"
-    kubelet_conf_template: "default"
-    kubeproxy_template: "default"
-  delegate_facts: True
-  delegate_to: "{{ item }}"
-  with_inventory_hostnames:
-    - kubernetes_nodes
-
-- name: Set path of kubernetes manifest templates
-  set_fact:
-    major_k8s_version: "{{ kube_release_version | regex_replace('^(v[\\d]+\\.[\\d]+).*', '\\1') }}"
-  when: kube_release_version is defined
-
-- name: Check if particular manifests for version {{ kube_release_version }} exist
-  stat:
-    path: "{{ playbook_dir }}/roles/common/tasks/templates/manifests/{{ major_k8s_version }}"
-  register: particular_manifest
-  when: kube_release_version is defined
-
-- name: Set path of kubernetes manifest templates
-  set_fact:
-    k8s_manifest_template: "manifests/{{ major_k8s_version }}"
-  delegate_facts: True
-  delegate_to: "{{ item }}"
-  with_inventory_hostnames:
-    - kubernetes_nodes
-  when: kube_release_version is defined and particular_manifest.stat.isdir is defined and particular_manifest.stat.isdir
-
-- name: Check if the particular kubelet configuration for version {{ kube_release_version }} exists
-  stat:
-    path: "{{ playbook_dir }}/roles/kubelet/tasks/templates/{{ major_k8s_version }}"
-  register: particular_kubelet
-  when: kube_release_version is defined
-
-- name: Set path of kubelet configuration
-  set_fact:
-    kubelet_conf_template: "{{ major_k8s_version }}"
-  delegate_facts: True
-  delegate_to: "{{ item }}"
-  with_inventory_hostnames:
-    - kubernetes_nodes
-  when: kube_release_version is defined and particular_kubelet.stat.isdir is defined and particular_kubelet.stat.isdir
-
-- name: Check if the particular kubeproxy configuration for version {{ kube_release_version }} exists
-  stat:
-    path: "{{ playbook_dir }}/roles/kube-proxy/templates/{{ major_k8s_version }}"
-  register: particular_kubeproxy
-  when: kube_release_version is defined
-
-- name: Set path of kubeproxy configuration
-  set_fact:
-    kubeproxy_template: "{{ major_k8s_version }}"
-  delegate_facts: True
-  delegate_to: "{{ item }}"
-  with_inventory_hostnames:
-    - kubernetes_nodes
-  when: kube_release_version is defined and particular_kubeproxy.stat.isdir is defined and particular_kubeproxy.stat.isdir

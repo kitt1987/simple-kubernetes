@@ -21,7 +21,7 @@
 
 - name: Replicate the manifest of etcd
   template:
-    src: "manifests/etcd.yml.j2"
+    src: "{{ k8s_manifest_template }}/etcd.yml.j2"
     dest: "{{ manifest_path }}/etcd.yml"
 
 - name: Replicate the manifest of api-server
