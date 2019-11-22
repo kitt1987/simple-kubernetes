@@ -22,7 +22,7 @@ spec:
     - --tls-private-key-file=/etc/kubernetes/pki/kube-api-server-key.pem
     - --tls-cert-file=/etc/kubernetes/pki/kube-api-server.pem
     - --secure-port=6443
-    - --allow-privileged=true
+    - --allow-privileged
     - --requestheader-allowed-names=front-proxy-client
     - --service-cluster-ip-range={{ service_cidr }}
     - --requestheader-client-ca-file=/etc/kubernetes/pki/kube-front-proxy-ca.pem

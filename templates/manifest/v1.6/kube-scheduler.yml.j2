@@ -30,19 +30,11 @@ spec:
       requests:
         cpu: 100m
     volumeMounts:
-    - mountPath: /etc/kubernetes/pki
-      name: k8s-certs
-      readOnly: true
-    - mountPath: /etc/kubernetes/kube-scheduler.conf
-      name: kubeconfig
+    - mountPath: /etc/kubernetes/
+      name: k8s
       readOnly: true
   hostNetwork: true
   volumes:
   - hostPath:
-      path: /etc/kubernetes/kube-scheduler.conf
-      type: FileOrCreate
-    name: kubeconfig
-  - hostPath:
-      path: /etc/kubernetes/pki
-      type: DirectoryOrCreate
-    name: k8s-certs
+      path: /etc/kubernetes
+    name: k8s
