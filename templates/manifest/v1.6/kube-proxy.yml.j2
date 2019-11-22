@@ -83,11 +83,9 @@ spec:
         name: kube-proxy
       - hostPath:
           path: /run/xtables.lock
-          type: FileOrCreate
         name: xtables-lock
       - hostPath:
           path: /lib/modules
-          type: ""
         name: lib-modules
   updateStrategy:
     rollingUpdate:
