@@ -1,0 +1,47 @@
+- name: API server endpoint initial
+  hosts: localhost
+  tasks:
+    - import_role:
+        name: api-server
+        tasks_from: endpoint
+  vars:
+    ansible_connection: local
+
+- name: Generate PKI
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: kube-pki
+      tasks_from: generate
+  vars:
+    ansible_connection: local
+
+- name: Generate PKI for etcd
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: etcd
+      tasks_from: generate-ca
+  vars:
+    ansible_connection: local
+
+- name: Generate Certificates for etcd
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: etcd
+      tasks_from: generate-cert
+
+- name: Install api-server
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: api-server
+      tasks_from: pki
+
+- name: Install configuration for kubelet
+  hosts: localhost
+  tasks:
+  - import_role:
+      name: common
+      tasks_from: node-cert

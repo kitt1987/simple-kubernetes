@@ -19,7 +19,7 @@
     cert_csr: "{{ apiserver_cert_csr }}"
     cert: "{{ apiserver_cert_crt }}"
     cn: kube-apiserver
-    san: "{{ inventory_hostname }},{{ ansible_default_ipv4.address }},{{ service_cidr | ipaddr('1') | ipv4('address') }},localhost,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local"
+    san: "{{ hostvars[groups['master'][0]]['inventory_hostname'] }},{{ hostvars[groups['master'][0]]['ansible_host'] }},{{ service_cidr | ipaddr('1') | ipv4('address') }},localhost,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local"
   when: "{{ groups['master'] | length == 1 }}"
 
 - name: Generate certificate for kubelet client
