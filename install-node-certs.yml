@@ -1,0 +1,54 @@
+- name: API server endpoint initial
+  hosts: localhost
+  tasks:
+    - import_role:
+        name: api-server
+        tasks_from: endpoint
+  vars:
+    ansible_connection: local
+
+- name: Install configuration for kubelet
+  hosts: master[0]
+  tasks:
+    - name: Generate certificate for kube-scheduler
+      shell: |
+        KUBECONFIG=/etc/kubernetes/kube-scheduler.conf kubectl config set-cluster default-cluster --server={{ apiserver_endpoint }} --certificate-authority {{ kube_ca_crt }} --embed-certs
+        KUBECONFIG=/etc/kubernetes/kube-scheduler.conf kubectl config set-credentials kube-scheduler --client-key {{ scheduler_cert_key }} --client-certificate {{ scheduler_cert_crt }} --embed-certs
+        KUBECONFIG=/etc/kubernetes/kube-scheduler.conf kubectl config set-context default-system --cluster default-cluster --user kube-scheduler
+        KUBECONFIG=/etc/kubernetes/kube-scheduler.conf kubectl config use-context default-system
+    - name: Generate certificate for kube-controller-manager
+      shell: |
+        KUBECONFIG=/etc/kubernetes/kube-controller-manager.conf kubectl config set-cluster default-cluster --server={{ apiserver_endpoint }} --certificate-authority {{ kube_ca_crt }} --embed-certs
+        KUBECONFIG=/etc/kubernetes/kube-controller-manager.conf kubectl config set-credentials kube-controller-manager --client-key {{ controller_manager_cert_key }} --client-certificate {{ controller_manager_cert_crt }} --embed-certs
+        KUBECONFIG=/etc/kubernetes/kube-controller-manager.conf kubectl config set-context default-system --cluster default-cluster --user kube-controller-manager
+        KUBECONFIG=/etc/kubernetes/kube-controller-manager.conf kubectl config use-context default-system
+    - name: Generate certificate for admin
+      shell: |
+        KUBECONFIG=/etc/kubernetes/admin.conf kubectl config set-cluster default-cluster --server={{ apiserver_endpoint }} --certificate-authority {{ kube_ca_crt }} --embed-certs
+        KUBECONFIG=/etc/kubernetes/admin.conf kubectl config set-credentials admin --client-key {{ admin_cert_key }} --client-certificate {{ admin_cert_crt }} --embed-certs
+        KUBECONFIG=/etc/kubernetes/admin.conf kubectl config set-context default-system --cluster default-cluster --user admin
+        KUBECONFIG=/etc/kubernetes/admin.conf kubectl config use-context default-system
+        mkdir -p /root/.kube
+        cp -fp /etc/kubernetes/admin.conf /root/.kube/config
+    - name: Generate certificate for kubelet on masters
+      shell: |
+        KUBECONFIG=/etc/kubernetes/kubelet.conf kubectl config set-cluster default-cluster --server={{ apiserver_endpoint }} --certificate-authority {{ kube_ca_crt }} --embed-certs
+        KUBECONFIG=/etc/kubernetes/kubelet.conf kubectl config set-credentials system:node:{{ inventory_hostname }} --client-key /etc/kubernetes/pki/kubelet-{{ inventory_hostname }}-key.pem --client-certificate /etc/kubernetes/pki/kubelet-{{ inventory_hostname }}.pem --embed-certs
+        KUBECONFIG=/etc/kubernetes/kubelet.conf kubectl config set-context default-system --cluster default-cluster --user system:node:{{ inventory_hostname }}
+        KUBECONFIG=/etc/kubernetes/kubelet.conf kubectl config use-context default-system
+    - import_role:
+        name: api-server
+        tasks_from: kubelet-cert
+    - import_role:
+        name: api-server
+        tasks_from: sync-node-cert
+
+- name: Reconfigure kubelet service
+  hosts: kubernetes_nodes
+  tasks:
+    - name: Reconfigure kubelet service
+      systemd:
+        name: kubelet.service
+        state: restarted
+        enabled: yes
+        daemon_reload: yes

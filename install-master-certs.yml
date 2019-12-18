@@ -1,0 +1,12 @@
+- name: Upload PKI to masters
+  hosts: master
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: Upload PKI to master
+      copy:
+        src: "{{ playbook_dir }}/pki/"
+        dest: "{{ pki_path }}"
+        force: no
+    - debug:
+        msg: "Please update manifest with the new certificates. But keep the old SA certificate."
