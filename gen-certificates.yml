@@ -1,3 +1,11 @@
+- name: Clean PKI
+  hosts: localhost
+  tasks:
+    - name: Clean PKI
+      shell: rm -rf "{{ pki_path }}"/*
+  vars:
+    ansible_connection: local
+
 - name: API server endpoint initial
   hosts: localhost
   tasks:

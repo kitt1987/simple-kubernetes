@@ -12,7 +12,7 @@
   template:
     src: "cnf-ca.j2"
     dest: "{{ ca }}.cnf"
-  when: not cnf_state.stat.exists
+  when: not ca_state.stat.exists or not ca_key_state.stat.exists
 
 - name: Generate CA and private Key
   shell: |
