@@ -4,3 +4,4 @@
     kubectl set env ds weave-net -n kube-system --containers="weave" IPALLOC_RANGE={{ pod_cidr }}
   args:
     executable: /bin/bash
+  ignore_errors: yes

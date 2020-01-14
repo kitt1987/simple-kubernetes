@@ -8,7 +8,13 @@
     path: "{{ ca_key }}"
   register: ca_key_state
 
+- name: Generate CNF file
+  template:
+    src: "cnf-ca.j2"
+    dest: "{{ ca }}.cnf"
+  when: not ca_state.stat.exists or not ca_key_state.stat.exists
+
 - name: Generate CA and private Key
   shell: |
-    openssl req -newkey rsa:4096 -nodes -keyout {{ ca_key }} -x509 -subj "/CN={{ cn }}" -days 3650 -out {{ ca }}
-  when: ca_state.stat.exists == False or ca_key_state.stat.exists == False
+    openssl req -newkey rsa:4096 -nodes -keyout {{ ca_key }} -x509 -config {{ ca }}.cnf -days 3650 -out {{ ca }}
+  when: not ca_state.stat.exists or not ca_key_state.stat.exists

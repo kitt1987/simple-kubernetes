@@ -1,0 +1,11 @@
+[ req ]
+distinguished_name      = req_distinguished_name
+x509_extensions = usr_cert
+prompt = no
+
+[req_distinguished_name]
+CN = {{ cn }}
+
+[ usr_cert ]
+basicConstraints = critical,CA:true
+keyUsage = critical, digitalSignature, keyCertSign, keyEncipherment

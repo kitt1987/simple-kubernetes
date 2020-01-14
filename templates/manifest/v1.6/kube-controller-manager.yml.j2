@@ -13,7 +13,6 @@ spec:
   - command:
     - kube-controller-manager
     - --controllers=*,bootstrapsigner,tokencleaner
-    - --bind-address=127.0.0.1
     - --leader-elect=true
     - --use-service-account-credentials=true
     - --kubeconfig=/etc/kubernetes/kube-controller-manager.conf
@@ -24,7 +23,7 @@ spec:
     - --allocate-node-cidrs
     - --cluster-cidr={{ pod_cidr }}
     - --node-cidr-mask-size=24
-    image: k8s.gcr.io/kube-controller-manager:{{ kube_release_version }}
+    image: kube-controller-manager:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:
@@ -39,14 +38,11 @@ spec:
       requests:
         cpu: 200m
     volumeMounts:
-    - mountPath: /etc/kubernetes/pki
-      name: k8s-certs
-      readOnly: true
     - mountPath: /etc/ssl/certs
       name: ca-certs
       readOnly: true
-    - mountPath: /etc/kubernetes/kube-controller-manager.conf
-      name: kubeconfig
+    - mountPath: /etc/kubernetes/
+      name: k8s
       readOnly: true
     - mountPath: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
       name: flexvolume-dir
@@ -57,14 +53,9 @@ spec:
       type: DirectoryOrCreate
     name: ca-certs
   - hostPath:
-      path: /etc/kubernetes/kube-controller-manager.conf
-      type: FileOrCreate
-    name: kubeconfig
+      path: /etc/kubernetes
+    name: k8s
   - hostPath:
       path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
       type: DirectoryOrCreate
     name: flexvolume-dir
-  - hostPath:
-      path: /etc/kubernetes/pki
-      type: DirectoryOrCreate
-    name: k8s-certs

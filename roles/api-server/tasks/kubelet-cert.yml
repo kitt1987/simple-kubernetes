@@ -5,4 +5,4 @@
     KUBECONFIG={{ remote_kubelet_certs_path }}/kubelet-{{ item }}.config kubectl config set-context default-system --cluster default-cluster --user system:node:{{ item }}
     KUBECONFIG={{ remote_kubelet_certs_path }}/kubelet-{{ item }}.config kubectl config use-context default-system
   with_inventory_hostnames:
-    - nodes
+    - kubernetes_nodes
