@@ -12,7 +12,7 @@ RUN apk --update add curl \
 
 FROM williamyeh/ansible:alpine3
 COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/
-RUN apk add --update --no-cache bash && rm -rf /var/cache/apk/*
+RUN apk add --update --no-cache bash bash-completion && rm -rf /var/cache/apk/*
 RUN ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
 RUN pip install netaddr
 
