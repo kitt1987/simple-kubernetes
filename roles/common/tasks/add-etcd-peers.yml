@@ -1,4 +1,6 @@
 - name: Add etcd peers
   shell: |
     kubectl -n kube-system exec -ti etcd-{{ inventory_hostname }} -- etcdctl --ca-file /etc/pki/etcd-ca.pem --cert-file /etc/pki/kube-etcd-server-{{ inventory_hostname }}.pem --key-file /etc/pki/kube-etcd-server-{{ inventory_hostname }}-key.pem --endpoints https://{{ ansible_host }}:2379  member add {{ hostvars[item]['inventory_hostname'] }}  https://{{  hostvars[item]['ansible_host'] }}:2380
+  args:
+    executable: /bin/bash
   with_items: "{{ groups['nodes'] }}"

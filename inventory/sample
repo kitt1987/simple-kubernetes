@@ -5,15 +5,9 @@ m2.ha.env.lab.io ansible_host=10.38.1.14
 m3.ha.env.lab.io ansible_host=10.38.1.15
 
 [nodes]
+# Specify here when adding new nodes or masters
 n1.ha.env.lab.io ansible_host=10.38.1.16
 n2.ha.env.lab.io ansible_host=10.38.1.17
-
-[localhost]
-localhost
-
-[kubernetes_nodes:children]
-master
-nodes
 
 [all:vars]
 # The version of K8S to be installed which should be same to the release on GitHub. The latest version is used if not specified.
@@ -38,6 +32,7 @@ etcd_image = quay.io/coreos/etcd:v3.2.18
 # Determine whether to install CoreDNS as the default DNS component and the image for CoreDNS.
 install_coredns = True
 coredns_image = coredns/coredns:1.5.0
+coredns_manifest_url = https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/coredns.yaml.sed
 
 # The image of the pause container
 pod_infra_container_image = kubernetes/pause:go
@@ -62,6 +57,13 @@ cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz
 retry_period_in_seconds = 5
 api_server_first_up_retry_cycle = 50
 node_role_setting_retry_cycle = 10
+
+[localhost]
+localhost
+
+[kubernetes_nodes:children]
+master
+nodes
 
 [localhost:vars]
 ansible_connection=local

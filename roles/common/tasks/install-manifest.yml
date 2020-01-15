@@ -43,8 +43,8 @@
   shell: |
     ip r | grep default | awk '{ print $5 }'
   register: keepalived_interface
-  when: "{{ groups['master'] | length > 2 }}"
+  when: "groups['master'] | length > 2"
 
 - name: Install LB for API Server
   include_tasks: apiserver-lb.yml
-  when: "{{ groups['master'] | length > 2 }}"
+  when: "groups['master'] | length > 2"

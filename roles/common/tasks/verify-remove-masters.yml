@@ -1,0 +1,19 @@
+- name: Calculate number of masters to be removed
+  set_fact:
+    num_masters_to_be_removed: "{{ groups['nodes'] | length }}"
+
+- name: Calculate number of running masters
+  shell: |
+    export numMasters=$(kubectl get no --no-headers -l node-role.kubernetes.io/master= | grep Ready | wc -l)
+  register: num_running_masters_out
+  args:
+    executable: /bin/bash
+
+- name: Convert number of running masters
+  set_facts:
+    num_running_masters: "{{ num_running_masters_out.stdout | int }}"
+
+- name: Verify masters
+  fail:
+    msg: "Remove {{ num_masters_to_be_removed }} masters out of {{ num_running_masters }} may crash the whole cluster"
+  when: num_running_masters > 1 and num_running_masters-num_masters_to_be_removed < 2 or num_running_masters-num_masters_to_be_removed < 1
