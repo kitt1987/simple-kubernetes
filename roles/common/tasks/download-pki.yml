@@ -1,0 +1,6 @@
+- name: Download CAs
+  synchronize:
+    src: "{{ pki_path }}/"
+    dest: "{{ local_pki_path }}/"
+    mode: pull
+    private_key: "{{ playbook_dir }}/node-ssh-key/kube-node-ssh-key"

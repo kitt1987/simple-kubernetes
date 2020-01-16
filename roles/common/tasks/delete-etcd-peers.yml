@@ -1,0 +1,7 @@
+- name: Remove etcd peers
+  shell: |
+    export memID=$(kubectl -n kube-system exec -ti etcd-{{ inventory_hostname }} -- etcdctl --ca-file /etc/pki/etcd-ca.pem --cert-file /etc/pki/kube-etcd-server-{{ inventory_hostname }}.pem --key-file /etc/pki/kube-etcd-server-{{ inventory_hostname }}-key.pem --endpoints https://{{ ansible_host }}:2379  member list | grep {{ hostvars[item]['inventory_hostname'] }} | awk '{ print $1 }' | sed 's/:$//')
+    kubectl -n kube-system exec -ti etcd-{{ inventory_hostname }} -- etcdctl --ca-file /etc/pki/etcd-ca.pem --cert-file /etc/pki/kube-etcd-server-{{ inventory_hostname }}.pem --key-file /etc/pki/kube-etcd-server-{{ inventory_hostname }}-key.pem --endpoints https://{{ ansible_host }}:2379  member remove ${memID}
+  args:
+    executable: /bin/bash
+  with_items: "{{ groups['nodes'] }}"

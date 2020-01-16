@@ -1,0 +1,5 @@
+- name: Delete nodes
+  shell: "kubectl delete no {{ hostvars[item]['inventory_hostname'] | lower }}"
+  args:
+    executable: /bin/bash
+  with_items: "{{ groups['nodes'] }}"

@@ -1,7 +1,7 @@
 - name: Download CoreDNS manifest
   include_tasks: ../../cache/tasks/http-file.yml
   vars:
-    url: https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/coredns.yaml.sed
+    url: "{{ coredns_manifest_url }}"
     dest: "/tmp/coredns.yaml.sed"
 
 - name: Install CoreDNS

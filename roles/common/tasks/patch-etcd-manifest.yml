@@ -1,0 +1,6 @@
+- name: Enable docker
+  shell: |
+    sed -i 's:--initial-cluster-state=new:--initial-cluster-state=existing:' etcd.yml
+  args:
+    chdir: "{{ manifest_path }}"
+    executable: /bin/bash
