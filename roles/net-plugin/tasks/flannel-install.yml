@@ -1,0 +1,6 @@
+- name: Install Flannel
+  shell: |
+    kubectl apply -f /tmp/kube-flannel.yml
+  args:
+    executable: /bin/bash
+  ignore_errors: yes

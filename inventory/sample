@@ -41,7 +41,7 @@ pod_infra_container_image = kubernetes/pause:go
 install_docker = True
 docker_release_remote = https://download.docker.com/linux/static/stable/x86_64/docker-19.03.1.tgz
 
-# Specify CNI plugin to be installed. Only weave-net supported now.
+# Specify CNI plugin to be installed. Only `weave-net` and `flannel` are supported now.
 cni_plugin = weave-net
 
 # Timeout for installing package from official repositories

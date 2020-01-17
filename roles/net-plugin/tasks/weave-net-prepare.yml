@@ -1,4 +1,4 @@
-- name: Download CoreDNS manifest
+- name: Download weave manifest
   include_tasks: ../../cache/tasks/http-file.yml
   vars:
     url: "https://cloud.weave.works/k8s/net?k8s-version={{ kube_release_version }}"

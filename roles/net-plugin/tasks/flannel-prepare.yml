@@ -1,0 +1,18 @@
+- name: Download flannel manifest
+  include_tasks: ../../cache/tasks/http-file.yml
+  vars:
+    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+    dest: "/tmp/kube-flannel.yml"
+
+- name: Figure images out
+  shell: |
+    grep -E '^\s*image:.+amd64$' 'kube-flannel.yml' | uniq | awk '{ print $2 }'
+  delegate_to: localhost
+  register: flannel_image_list
+
+- name: Sync flannel images
+  include_tasks: ../../cache/tasks/image.yml
+  vars:
+    image: "{{ item }}"
+  with_items:
+    - "{{ flannel_image_list.stdout_lines }}"
