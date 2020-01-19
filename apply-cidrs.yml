@@ -1,28 +1,15 @@
-- import_playbook: disclose-hostname.yml
-- import_playbook: install-ssh-key.yml
-- import_playbook: init-manifest-template.yml
-- import_playbook: init-apiserver-endpoint.yml
-- import_playbook: backup.yml
-
-- name: Clear kubelet configuration
-  hosts: kubernetes_nodes
-  tasks:
-  - import_role:
-      name: common
-      tasks_from: clean-node
-
-- import_playbook: load-image.yml
-- import_playbook: install-cni.yml
-- import_playbook: install-kube-release.yml
-- import_playbook: deploy-master.yml
-- import_playbook: deploy-node.yml
-
-- name: Rebuild service default/kubernetes
-  hosts: master[0]
-  tasks:
-  - import_role:
-      name: common
-      tasks_from: remove-kubernetes-service
+- import_playbook: lib/disclose-hostname.yml
+- import_playbook: lib/install-ssh-key.yml
+- import_playbook: lib/init-manifest-template.yml
+- import_playbook: lib/init-apiserver-endpoint.yml
+- import_playbook: lib/backup.yml
+- import_playbook: lib/clean-node.yml
+- import_playbook: lib/load-image.yml
+- import_playbook: lib/install-cni.yml
+- import_playbook: lib/install-kube-release.yml
+- import_playbook: lib/deploy-master.yml
+- import_playbook: lib/deploy-node.yml
+- import_playbook: lib/rebuild-kubernetes-svc.yml
 
 # You should manually copy the SA certificate back and replace which the api server used.
 # The CNI plugin configuration should be also updated manually.

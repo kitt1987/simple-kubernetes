@@ -1,0 +1,6 @@
+- name: Prepare network plugin
+  hosts: nodes
+  tasks:
+    - import_role:
+        name: net-plugin
+        tasks_from: prepare

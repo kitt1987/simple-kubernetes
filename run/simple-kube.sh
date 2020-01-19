@@ -9,7 +9,7 @@ docker run --name simple-kube --net=host -ti --rm \
   -e http_proxy="${http_proxy}" -e https_proxy="${https_proxy}" -e no_proxy="${no_proxy}" \
   --mount type=tmpfs,destination=/root/.ansible/cps \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v $(pwd)/releases:/simple-kube/releases \
-  -v $(pwd)/inventory:/simple-kube/inventory \
-  -v $(pwd)/on-prem-cache:/simple-kube/on-prem-cache \
-  kitt0hsu/simple-kube:95fbda4019a49ecc5f458e18d507ede7f5e395f7-20200119164938
+  -v $(pwd)/lib/releases:/simple-kube/lib/releases \
+  -v $(pwd)/lib/inventory:/simple-kube/lib/inventory \
+  -v $(pwd)/lib/on-prem-cache:/simple-kube/lib/on-prem-cache \
+  kitt0hsu/simple-kube:7c82cf37e6982c1fb90d9b58cae88b4e3b1148b6-20200119180201

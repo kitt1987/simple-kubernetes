@@ -1,11 +1,3 @@
-- import_playbook: init-python.yml
-
-- name: Delete nodes
-  hosts: master[0]
-  tasks:
-    - import_role:
-        name: common
-        tasks_from: remove-node
-    - import_role:
-        name: common
-        tasks_from: delete-etcd-peers
+- import_playbook: lib/init-python.yml
+- import_playbook: lib/remove-nodes.yml
+- import_playbook: lib/remove-etcd-peers.yml

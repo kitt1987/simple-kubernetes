@@ -1,15 +1,3 @@
-- import_playbook: init-python.yml
-
-- name: Clear kubelet configuration
-  hosts: kubernetes_nodes
-  tasks:
-    - import_role:
-        name: common
-        tasks_from: clean-node
-
-- name: Clear etcd configuration
-  hosts: master
-  tasks:
-  - import_role:
-      name: common
-      tasks_from: clean-etcd
+- import_playbook: lib/init-python.yml
+- import_playbook: lib/clean-node.yml
+- import_playbook: lib/clean-master.yml
