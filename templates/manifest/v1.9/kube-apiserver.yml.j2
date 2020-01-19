@@ -39,7 +39,6 @@ spec:
     - --etcd-cafile=/etc/kubernetes/pki/etcd-ca.pem
     - --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.pem
     - --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client-key.pem
-    - --feature-gates=DynamicKubeletConfig=true,CustomPodDNS=true
     image: kube-apiserver:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8

@@ -25,4 +25,5 @@
 
 - name: Load {{ image }}
   shell: |
-    docker load -i /tmp/{{ image | basename }}.tar
+    {{ image_load_func }}
+    load_image /tmp/{{ image | basename }}.tar

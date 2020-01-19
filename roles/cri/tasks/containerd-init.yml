@@ -1,0 +1,12 @@
+- name: Initialize containerd connection
+  set_fact:
+    kubelet_cri_args: "--container-runtime=remote --container-runtime-endpoint={{ cri_endpoint }}"
+    image_load_func: |
+      load_image() {
+        local image=$1
+        local tag=$2
+        local loaded_tag=$(ctr -n k8s.io i import ${image} | awk '{ print $2 }')
+        if [ "${tag}" != "" ]; then
+          ctr -n k8s.io i tag ${loaded_tag} ${tag}
+        fi
+      }

@@ -3,10 +3,11 @@
 
 - name: Load images
   shell: |
+    {{ image_load_func }}
     [[ ! -d kubernetes/server/bin ]] && tar zxf kubernetes-server-linux-amd64.tar.gz
     pushd kubernetes/server/bin > /dev/null
     for tar in *.tar; do
-      docker tag `docker load -qi ${tar} | awk '{ print $3 }'` `basename -s.tar ${tar}`:{{ kube_release_version }}
+      load_image ${tar} k8s.gcr.io/`basename -s.tar ${tar}`:{{ kube_release_version }}
     done
     cp kubeadm kubectl kubelet /usr/bin
     popd > /dev/null

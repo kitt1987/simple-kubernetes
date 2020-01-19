@@ -1,0 +1,12 @@
+- name: Initialize docker variables
+  set_fact:
+    kubelet_cri_args: "--pod-infra-container-image={{ pod_infra_container_image }}"
+    image_load_func: |
+      load_image() {
+        local image=$1
+        local tag=$2
+        local loaded_tag=`docker load -qi ${image}` | awk '{ print $3 }'`
+        if [ "${tag}" != "" ]; then
+          docker tag ${loaded_tag} ${tag}
+        fi
+      }
