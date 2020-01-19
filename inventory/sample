@@ -37,8 +37,17 @@ coredns_manifest_url = https://raw.githubusercontent.com/coredns/deployment/mast
 # The image of the pause container
 pod_infra_container_image = kubernetes/pause:go
 
+# CRI configuration. `containerd` and `docker` are supported.
+cri = containerd
+cri_endpoint = unix:///var/run/containerd/containerd.sock
+
+# Containerd configuration
+install_containerd = False
+containerd_release_remote = https://github.com/containerd/containerd/releases/download/v1.3.2/containerd-1.3.2.linux-amd64.tar.gz
+containerd_service_remote = https://raw.githubusercontent.com/containerd/cri/master/contrib/systemd-units/containerd.service
+
 # Determine whether to install Docker and where to download packages
-install_docker = True
+install_docker = False
 docker_release_remote = https://download.docker.com/linux/static/stable/x86_64/docker-19.03.1.tgz
 
 # Specify CNI plugin to be installed. Only `weave-net` and `flannel` are supported now.
@@ -151,3 +160,8 @@ service_account_cert_crt="{{ pki_path }}/service-account.pem"
 service_account_cert_csr="{{ pki_path }}/service-account-csr.pem"
 remote_kubelet_certs_path="/tmp/kubelet-cert"
 ha_home="/etc/kubernetes/ha"
+
+# Manifests arguments
+kubelet_privileged =
+
+apiserver_runtime_config = "--runtime-config=api/all=true"

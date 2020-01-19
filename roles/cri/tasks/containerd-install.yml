@@ -1,0 +1,19 @@
+- name: Check docker
+  shell: docker info
+  register: docker_state
+  ignore_errors: yes
+
+- name: Fail on lack of Docker
+  fail:
+    msg: "You should uninstall Docker before trying to install containerd!"
+  when: docker_state
+
+- name: Check containerd
+  shell: |
+    ctr info
+  register: containerd_state
+  ignore_errors: yes
+
+- name: Install containerd
+  include_tasks: enable-containerd.yml
+  when: containerd_state is failed

@@ -3,8 +3,13 @@
 # Mount tmpfs for SSH ControlPath to work around SSH failures on overlay.
 # See https://github.com/moby/moby/issues/12080
 
+mkdir -p releases inventory on-prem-cache
+
 docker run --name simple-kube --net=host -ti --rm \
   -e http_proxy="${http_proxy}" -e https_proxy="${https_proxy}" -e no_proxy="${no_proxy}" \
   --mount type=tmpfs,destination=/root/.ansible/cps \
   -v /var/run/docker.sock:/var/run/docker.sock \
+  -v releases:/simple-kube/releases \
+  -v inventory:/simple-kube/inventory \
+  -v on-prem-cache:/simple-kube/on-prem-cache \
   kitt0hsu/simple-kube:476d1a3bc00b38bb6dc23f3dde83d8dba0221727-20200116174724

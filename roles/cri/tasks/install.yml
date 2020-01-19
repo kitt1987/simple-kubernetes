@@ -1,0 +1,3 @@
+- name: Install CRI
+  include_tasks: "{{ cri }}-install.yml"
+  when: install_{{ cri }}

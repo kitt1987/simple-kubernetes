@@ -1,0 +1,13 @@
+- name: Initialize CRI
+  hosts: kubernetes_nodes
+  tasks:
+    - import_role:
+        name: cri
+        tasks_from: init
+
+- name: Install CRI
+  hosts: kubernetes_nodes
+  tasks:
+    - import_role:
+        name: cri
+        tasks_from: install

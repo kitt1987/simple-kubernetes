@@ -1,0 +1,2 @@
+- name: Initialize CRI
+  include_tasks: "{{ cri }}-init.yml"

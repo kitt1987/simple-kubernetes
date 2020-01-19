@@ -1,0 +1,9 @@
+- name: Initialize containerd connection
+  set_fact:
+    kubelet_cri_args: "--container-runtime=remote --container-runtime-endpoint={{ cri_endpoint }}"
+    image_load_func: |
+      load_image() {
+        local image=$1
+        local tag=$2
+        ctr images import ${image}
+      }

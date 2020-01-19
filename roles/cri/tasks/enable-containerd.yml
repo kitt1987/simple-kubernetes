@@ -1,0 +1,36 @@
+- name: Download containerd release
+  include_tasks: ../../cache/tasks/http-file.yml
+  vars:
+    url: "{{ containerd_release_remote }}"
+    dest: "/tmp/containerd.tgz"
+
+- name: Download containerd.service
+  include_tasks: ../../cache/tasks/http-file.yml
+  vars:
+    url: "{{ containerd_service_remote }}"
+    dest: "/etc/systemd/system/containerd.service"
+
+- name: Disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+  ignore_errors: yes
+
+- name: Enable containerd
+  shell: |
+    tar zxf containerd.tgz -C /usr/local
+    mkdir -p /etc/containerd
+    containerd config default > /etc/containerd/config.toml
+    sed -i 's!k8s.gcr.io/pause:3.1!{{ pod_infra_container_image }}!' /etc/containerd/config.toml
+  args:
+    chdir: /tmp
+    executable: /bin/bash
+
+- name: Enable containerd service
+  systemd:
+    name: containerd.service
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
