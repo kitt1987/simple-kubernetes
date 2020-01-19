@@ -26,7 +26,11 @@
   ignore_errors: yes
 
 - name: Set hostname
-  shell: hostnamectl set-hostname {{ inventory_hostname }}
+  shell: |
+    if [[ -d /etc/cloud ]]; then
+      touch /etc/cloud/cloud-init.disabled
+    fi
+    hostnamectl set-hostname {{ inventory_hostname }}
   args:
     executable: /bin/bash
 

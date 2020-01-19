@@ -12,6 +12,7 @@ spec:
   containers:
   - command:
     - kube-apiserver
+    - --runtime-config=api/all=true
     - --requestheader-group-headers=X-Remote-Group
     - --client-ca-file=/etc/kubernetes/pki/kube-ca.pem
     - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.pem
