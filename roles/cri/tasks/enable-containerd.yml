@@ -4,6 +4,12 @@
     url: "{{ containerd_release_remote }}"
     dest: "/tmp/containerd.tgz"
 
+- name: Download runC release
+  include_tasks: ../../cache/tasks/http-file.yml
+  vars:
+    url: "{{ runc_remote }}"
+    dest: "/tmp/runc"
+
 - name: Download containerd.service
   include_tasks: ../../cache/tasks/http-file.yml
   vars:
@@ -21,6 +27,8 @@
 - name: Enable containerd
   shell: |
     tar zxf containerd.tgz -C /usr/local
+    chmod +x runc
+    mv runc /usr/local/bin/
     mkdir -p /etc/containerd
     containerd config default > /etc/containerd/config.toml
     sed -i 's!k8s.gcr.io/pause:3.1!{{ pod_infra_container_image }}!' /etc/containerd/config.toml

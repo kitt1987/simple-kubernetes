@@ -3,10 +3,10 @@
   register: docker_state
   ignore_errors: yes
 
-- name: Fail on lack of Docker
+- name: Fail if Docker installed
   fail:
     msg: "You should uninstall Docker before trying to install containerd!"
-  when: docker_state
+  when: docker_state is succeeded
 
 - name: Check containerd
   shell: |

@@ -24,7 +24,7 @@ spec:
     - --allocate-node-cidrs
     - --cluster-cidr={{ pod_cidr }}
     - --node-cidr-mask-size=24
-    image: kube-controller-manager:{{ kube_release_version }}
+    image: k8s.gcr.io/kube-controller-manager:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:

@@ -55,7 +55,7 @@ spec:
         - /usr/local/bin/kube-proxy
         - --config=/var/lib/kube-proxy/config.conf
         - --cluster-cidr={{ pod_cidr }}
-        image: kube-proxy:{{ kube_release_version }}
+        image: k8s.gcr.io/kube-proxy:{{ kube_release_version }}
         imagePullPolicy: IfNotPresent
         name: kube-proxy
         securityContext:

@@ -24,6 +24,7 @@
 - name: Clear containers
   shell: |
     docker rm -f `docker ps -a --format "{{ '{{' }}.Names{{ '}}' }}"  | grep -v simple-kube | awk '{ print $1 }'`
+    crictl rm -f `crictl ps -q`
   args:
     executable: /bin/bash
   ignore_errors: yes

@@ -1,0 +1,11 @@
+- name: Download crictl release
+  include_tasks: ../../cache/tasks/http-file.yml
+  vars:
+    url: "{{ crictl_remote }}"
+    dest: "/tmp/crictl-v1.17.0-linux-amd64.tar.gz"
+
+- name: Install crictl
+  shell: tar zxvf crictl-v1.17.0-linux-amd64.tar.gz -C /usr/local/bin
+  args:
+    chdir: /tmp
+    executable: /bin/bash

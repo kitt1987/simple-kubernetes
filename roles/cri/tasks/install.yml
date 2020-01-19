@@ -1,3 +1,6 @@
 - name: Install CRI
   include_tasks: "{{ cri }}-install.yml"
-  when: install_{{ cri }}
+  when: install_docker or install_containerd
+
+- name: Install crictl
+  include_tasks: "crictl.yml"

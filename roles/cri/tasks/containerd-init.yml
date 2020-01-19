@@ -5,5 +5,8 @@
       load_image() {
         local image=$1
         local tag=$2
-        ctr images import ${image}
+        local loaded_tag=$(ctr -n k8s.io i import ${image} | awk '{ print $2 }')
+        if [ "${tag}" != "" ]; then
+          ctr -n k8s.io i tag ${loaded_tag} ${tag}
+        fi
       }
