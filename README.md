@@ -28,10 +28,22 @@ ansible-playbook -i inventory/sample clean-cluster.yml
 
 Once failures arose before installation get done, clean the cluster would restore stale hosts.
 
-To add new nodes,
+To add new nodes, specify at least 1 master and all new nodes in the inventory and run,
 
 ```
 ansible-playbook -i inventory/sample add-node.yml
+```
+
+To add new masters , specify all masters in the `master` group and all new masters in both `master` and `nodes` group, then run,
+
+```
+ansible-playbook -i inventory/sample add-master.yml
+```
+
+To remove masters , specify all available masters in the `master` group and masters to be removed in the `nodes` group, then run,
+
+```
+ansible-playbook -i inventory/sample remove-master.yml
 ```
 
 ## Advanced Features
@@ -86,7 +98,6 @@ After the playbook done successfully, your legacy cluster configuration and Etcd
 - [x] Install HA cluster
 - [x] Save all the downloaded files for following installation
 - [x] Support HTTP_PROXY environment variables in the playbook and container
-- [ ] Install main stream CNI plugin
-- [ ] Divergent manifests for different releases
+- [x] Install main stream CNI plugin
 - [x] Parse coredns image from configuration
-- [ ] Image list for different versions of release
+- [ ] Compatible with `kubeadm`
