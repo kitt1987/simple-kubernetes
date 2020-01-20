@@ -4,6 +4,14 @@
 
 ## Install your cluster
 
+### Use the all-in-one image
+
+The all-in-one image contains all images and configurations required by simple-kube.
+
+```
+bash <(curl -sL https://raw.githubusercontent.com/kitt1987/simple-kubernetes/master/run/all-in-one-1.17.1.sh)
+```
+
 ### Run simple-kube in container
 
 ```
