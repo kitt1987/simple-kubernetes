@@ -6,7 +6,7 @@
 
 - name: Figure images out
   shell: |
-    grep -E '^\s*image:.+amd64$' 'kube-flannel.yml' | uniq | awk '{ print $2 }'
+    grep -E '^\s*image:.+amd64$' '{{ local_cache_path }}/kube-flannel.yml' | uniq | awk '{ print $2 }'
   delegate_to: localhost
   register: flannel_image_list
 
