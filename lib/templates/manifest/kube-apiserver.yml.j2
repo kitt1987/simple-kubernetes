@@ -12,30 +12,35 @@ spec:
   containers:
   - command:
     - kube-apiserver
+    - {{ apiserver_runtime_config }}
+    - --requestheader-username-headers=X-Remote-User
+    - --requestheader-extra-headers-prefix=X-Remote-Extra-
     - --requestheader-group-headers=X-Remote-Group
+    - --requestheader-allowed-names=front-proxy-client
+    - --requestheader-client-ca-file=/etc/kubernetes/pki/kube-front-proxy-ca.pem
     - --client-ca-file=/etc/kubernetes/pki/kube-ca.pem
     - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.pem
     - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client-key.pem
     - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
-    - --requestheader-username-headers=X-Remote-User
-    - --requestheader-extra-headers-prefix=X-Remote-Extra-
     - --tls-private-key-file=/etc/kubernetes/pki/kube-api-server-key.pem
     - --tls-cert-file=/etc/kubernetes/pki/kube-api-server.pem
     - --secure-port=6443
     - --allow-privileged
-    - --requestheader-allowed-names=front-proxy-client
+    - {{ apiserver_reconciler_type }}
     - --service-cluster-ip-range={{ service_cidr }}
-    - --requestheader-client-ca-file=/etc/kubernetes/pki/kube-front-proxy-ca.pem
-    - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,ResourceQuota
+    - {{ apiserver_proxy_client_cert_file }}
+    - {{ apiserver_proxy_client_key_file }}
+    - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota
+    - {{ apiserver_enable_bootstrap_token }}
     - --advertise-address=0.0.0.0
-    - --authorization-mode=RBAC
+    - --authorization-mode=Node,RBAC
     - --etcd-servers=https://{{ ansible_host }}:2379
     - --etcd-cafile=/etc/kubernetes/pki/etcd-ca.pem
     - --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.pem
     - --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client-key.pem
     - --service-account-key-file=/etc/kubernetes/pki/service-account.pem
-    - --feature-gates=DynamicKubeletConfig=true
-    image: kube-apiserver:{{ kube_release_version }}
+    - {{ apiserver_feature_gates }}
+    image: k8s.gcr.io/kube-apiserver:{{ kube_release_version }}
     livenessProbe:
       failureThreshold: 8
       httpGet:

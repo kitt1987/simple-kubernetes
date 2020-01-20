@@ -1,0 +1,6 @@
+- name: Rebuild service default/kubernetes
+  hosts: master[0]
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: remove-kubernetes-service

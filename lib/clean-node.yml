@@ -1,0 +1,6 @@
+- name: Clear kubelet configuration
+  hosts: kubernetes_nodes
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: clean-node

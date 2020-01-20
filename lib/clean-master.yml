@@ -1,0 +1,6 @@
+- name: Clear etcd configuration
+  hosts: master
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: clean-etcd

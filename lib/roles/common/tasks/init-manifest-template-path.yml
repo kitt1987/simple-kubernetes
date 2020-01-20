@@ -1,7 +1,7 @@
 - name: Set path of kubernetes manifest templates
   set_fact:
-    k8s_manifest_template: "{{ playbook_dir }}/templates/manifest/current"
-    systemd_conf_template: "{{ playbook_dir }}/templates/systemd/current"
+    k8s_manifest_template: "{{ playbook_dir }}/templates/manifest"
+    systemd_conf_template: "{{ playbook_dir }}/templates/systemd"
   delegate_facts: True
   delegate_to: "{{ item }}"
   with_inventory_hostnames:

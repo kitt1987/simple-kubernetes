@@ -1,0 +1,7 @@
+- name: Remove nodes
+  hosts: master[0]
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: remove-node
+

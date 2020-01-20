@@ -1,0 +1,72 @@
+- name: Prepare resources
+  hosts: nodes
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: create-dir-kubelet
+
+- name: Download PKI
+  hosts: master[0]
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: download-pki
+
+- name: Install PKI
+  hosts: nodes
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: install-pki
+
+- name: Generate Certificates for etcd
+  hosts: nodes
+  tasks:
+    - import_role:
+        name: etcd
+        tasks_from: generate-cert
+
+- name: Install manifests
+  hosts: nodes
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: install-manifest
+    - import_role:
+        name: common
+        tasks_from: patch-etcd-manifest
+
+- name: Install configuration for kubelet
+  hosts: master[0]
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: node-cert
+    - import_role:
+        name: api-server
+        tasks_from: kubelet-cert
+    - import_role:
+        name: api-server
+        tasks_from: sync-node-cert
+
+- name: Install kubelet
+  hosts: nodes
+  tasks:
+    - import_role:
+        name: kubelet
+        tasks_from: replicate-service
+    - import_role:
+        name: kubelet
+        tasks_from: common
+
+- name: Add new peers to etcd
+  hosts: master[0]
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: add-etcd-peers
+
+- name: Install api-server
+  hosts: nodes
+  roles:
+    - api-server
