@@ -2,11 +2,10 @@
 # When more than 2 masters specified, a HA cluster will be installed.
 m1.weave.env.lab.io ansible_host=10.38.1.4 ansible_password=0
 m2.weave.env.lab.io ansible_host=10.38.1.37 ansible_password=0
-m4.weave.env.lab.io ansible_host=10.38.1.39 ansible_password=0
 
 [nodes]
 # Specify here when adding new nodes or masters
-m4.weave.env.lab.io ansible_host=10.38.1.39 ansible_password=0
+m3.weave.env.lab.io ansible_host=10.38.1.38 ansible_password=0
 
 [all:vars]
 # The version of K8S to be installed which should be same to the release on GitHub. The latest version is used if not specified.
