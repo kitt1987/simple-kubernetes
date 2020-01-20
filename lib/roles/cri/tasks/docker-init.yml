@@ -5,7 +5,7 @@
       load_image() {
         local image=$1
         local tag=$2
-        local loaded_tag=`docker load -qi ${image}` | awk '{ print $3 }'`
+        local loaded_tag=$(docker load -qi ${image} | awk '{ print $3 }')
         if [ "${tag}" != "" ]; then
           docker tag ${loaded_tag} ${tag}
         fi

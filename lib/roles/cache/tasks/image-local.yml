@@ -27,3 +27,5 @@
   shell: |
     {{ image_load_func }}
     load_image /tmp/{{ image | basename }}.tar
+  args:
+    executable: /bin/bash

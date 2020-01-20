@@ -10,6 +10,6 @@ docker run --name simple-kube --net=host -ti --rm \
   --mount type=tmpfs,destination=/root/.ansible/cps \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v $(pwd)/lib/releases:/simple-kube/lib/releases \
-  -v $(pwd)/lib/inventory:/simple-kube/lib/inventory \
+  -v $(pwd)/inventory:/simple-kube/lib/inventory \
   -v $(pwd)/lib/on-prem-cache:/simple-kube/lib/on-prem-cache \
-  kitt0hsu/simple-kube:7c82cf37e6982c1fb90d9b58cae88b4e3b1148b6-20200119180201
+  kitt0hsu/simple-kube
