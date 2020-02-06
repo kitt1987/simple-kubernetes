@@ -165,9 +165,10 @@ ha_home="/etc/kubernetes/ha"
 
 # Manifests arguments
 kubelet_privileged =
+kubelet_args =
 
 apiserver_runtime_config = "--runtime-config=api/all=true"
-apiserver_feature_gates = ""
+apiserver_feature_gates =
 apiserver_reconciler_type = "--endpoint-reconciler-type=lease"
 apiserver_enable_bootstrap_token = "--enable-bootstrap-token-auth"
 apiserver_proxy_client_cert_file = "--proxy-client-cert-file=/etc/kubernetes/pki/kube-front-proxy-client.pem"
