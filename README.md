@@ -12,6 +12,12 @@ The all-in-one image contains all images and configurations required by simple-k
 bash <(curl -sL https://raw.githubusercontent.com/kitt1987/simple-kubernetes/master/run/all-in-one-1.17.1.sh)
 ```
 
+Or,
+
+```
+bash <(curl -sL https://raw.githubusercontent.com/kitt1987/simple-kubernetes/master/run/all-in-one-1.16.6.sh)
+```
+
 ### Run simple-kube in container
 
 ```
