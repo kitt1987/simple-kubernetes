@@ -35,12 +35,12 @@ coredns_manifest_url = https://raw.githubusercontent.com/coredns/deployment/mast
 pod_infra_container_image = docker.io/kubernetes/pause:go
 
 # CRI configuration. `containerd` and `docker` are supported.
-cri = containerd
-cri_endpoint = unix:///var/run/containerd/containerd.sock
+cri = docker
+# cri_endpoint = unix:///var/run/containerd/containerd.sock
 crictl_remote = https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.17.0/crictl-v1.17.0-linux-amd64.tar.gz
 
 # Containerd configuration
-install_containerd = True
+install_containerd = False
 containerd_release_remote = https://github.com/containerd/containerd/releases/download/v1.3.2/containerd-1.3.2.linux-amd64.tar.gz
 containerd_service_remote = https://raw.githubusercontent.com/containerd/cri/master/contrib/systemd-units/containerd.service
 runc_remote = https://github.com/opencontainers/runc/releases/download/v1.0.0-rc9/runc.amd64

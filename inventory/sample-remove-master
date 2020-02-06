@@ -37,7 +37,7 @@ pod_infra_container_image = docker.io/kubernetes/pause:go
 
 # CRI configuration. `containerd` and `docker` are supported.
 cri = docker
-cri_endpoint = unix:///var/run/containerd/containerd.sock
+# cri_endpoint = unix:///var/run/containerd/containerd.sock
 crictl_remote = https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.17.0/crictl-v1.17.0-linux-amd64.tar.gz
 
 # Containerd configuration
