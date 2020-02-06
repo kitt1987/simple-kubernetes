@@ -1,0 +1,173 @@
+[master]
+# When more than 2 masters specified, a HA cluster will be installed.
+m1.ws.env.lab.io ansible_host=10.38.1.40 ansible_password=0
+
+[nodes]
+# Specify here when adding new nodes or masters
+n1.ws.env.lab.io ansible_host=10.38.1.41 ansible_password=0
+
+[all:vars]
+# The version of K8S to be installed which should be same to the release on GitHub. The latest version is used if not specified.
+kube_release_version = v1.16.6
+
+# If sets to True, simple-kube will compare the checksum of local cached tarball to the release on GitHub.
+# If check failed, simple-kube will download a new release from GitHub.
+verify_kube_release = False
+
+# CIDR of the Pod network
+pod_cidr = 10.20.0.0/16
+
+# CIDR of the Service network
+service_cidr = 10.21.0.0/16
+
+# The virtual IP of kube-apiserver for a HA cluster
+apiserver_vip = 10.38.1.225
+
+# The image for etcd
+etcd_image = quay.io/coreos/etcd:v3.2.18
+
+# Determine whether to install CoreDNS as the default DNS component and the image for CoreDNS.
+install_coredns = True
+coredns_image = coredns/coredns:1.5.0
+coredns_manifest_url = https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/coredns.yaml.sed
+
+# The image of the pause container
+pod_infra_container_image = docker.io/kubernetes/pause:go
+
+# CRI configuration. `containerd` and `docker` are supported.
+cri = containerd
+cri_endpoint = unix:///var/run/containerd/containerd.sock
+crictl_remote = https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.17.0/crictl-v1.17.0-linux-amd64.tar.gz
+
+# Containerd configuration
+install_containerd = True
+containerd_release_remote = https://github.com/containerd/containerd/releases/download/v1.3.2/containerd-1.3.2.linux-amd64.tar.gz
+containerd_service_remote = https://raw.githubusercontent.com/containerd/cri/master/contrib/systemd-units/containerd.service
+runc_remote = https://github.com/opencontainers/runc/releases/download/v1.0.0-rc9/runc.amd64
+
+# Determine whether to install Docker and where to download packages
+install_docker = False
+docker_release_remote = https://download.docker.com/linux/static/stable/x86_64/docker-19.03.1.tgz
+
+# Specify CNI plugin to be installed. Only `weave-net` and `flannel` are supported now.
+cni_plugin = weave-net
+
+# Timeout for installing package from official repositories
+network_activity_timeout = 60 # in secs
+
+# Proxy mode for kube-proxy. The value could be one of iptables, ipvs and userspace(deprecated).
+proxy_mode = ipvs
+
+local_cache_path = {{ playbook_dir }}/on-prem-cache
+kube_release_local = {{ playbook_dir }}/releases/kubernetes-server-linux-amd64.tar.gz
+cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz
+
+retry_period_in_seconds = 5
+api_server_first_up_retry_cycle = 50
+node_role_setting_retry_cycle = 10
+
+[localhost]
+localhost
+
+[kubernetes_nodes:children]
+master
+nodes
+
+[localhost:vars]
+ansible_connection=local
+
+pki_path={{ playbook_dir }}/pki
+remote_pki_path=/etc/kubernetes/pki
+kube_ca_key="{{ pki_path }}/kube-ca-key.pem"
+kube_ca_crt="{{ pki_path }}/kube-ca.pem"
+kube_ca_csr="{{ pki_path }}/kube-ca-csr.pem"
+etcd_ca_key="{{ pki_path }}/etcd-ca-key.pem"
+etcd_ca_crt="{{ pki_path }}/etcd-ca.pem"
+etcd_ca_csr="{{ pki_path }}/etcd-ca-csr.pem"
+kube_front_proxy_ca_key="{{ pki_path }}/kube-front-proxy-ca-key.pem"
+kube_front_proxy_ca_crt="{{ pki_path }}/kube-front-proxy-ca.pem"
+kube_front_proxy_ca_csr="{{ pki_path }}/kube-front-proxy-ca-csr.pem"
+etcd_health_check_cert_key="{{ pki_path }}/etcd-healthcheck-client-key.pem"
+etcd_health_check_cert_crt="{{ pki_path }}/etcd-healthcheck-client.pem"
+etcd_health_check_cert_csr="{{ pki_path }}/etcd-healthcheck-client-csr.pem"
+apiserver_etcd_client_cert_key="{{ pki_path }}/apiserver-etcd-client-key.pem"
+apiserver_etcd_client_cert_crt="{{ pki_path }}/apiserver-etcd-client.pem"
+apiserver_etcd_client_cert_csr="{{ pki_path }}/apiserver-etcd-client-csr.pem"
+apiserver_cert_key="{{ pki_path }}/kube-api-server-key.pem"
+apiserver_cert_crt="{{ pki_path }}/kube-api-server.pem"
+apiserver_cert_csr="{{ pki_path }}/kube-api-server-csr.pem"
+kubelet_client_cert_key="{{ pki_path }}/apiserver-kubelet-client-key.pem"
+kubelet_client_cert_crt="{{ pki_path }}/apiserver-kubelet-client.pem"
+kubelet_client_cert_csr="{{ pki_path }}/apiserver-kubelet-client-csr.pem"
+controller_manager_cert_key="{{ pki_path }}/kube-controller-manager-key.pem"
+controller_manager_cert_crt="{{ pki_path }}/kube-controller-manager.pem"
+controller_manager_cert_csr="{{ pki_path }}/kube-controller-manager-csr.pem"
+scheduler_cert_key="{{ pki_path }}/kube-scheduler-key.pem"
+scheduler_cert_crt="{{ pki_path }}/kube-scheduler.pem"
+scheduler_cert_csr="{{ pki_path }}/kube-scheduler-csr.pem"
+admin_cert_key="{{ pki_path }}/admin-key.pem"
+admin_cert_crt="{{ pki_path }}/admin.pem"
+admin_cert_csr="{{ pki_path }}/admin-csr.pem"
+kube_front_proxy_client_cert_key="{{ pki_path }}/kube-front-proxy-client-key.pem"
+kube_front_proxy_client_cert_crt="{{ pki_path }}/kube-front-proxy-client.pem"
+kube_front_proxy_client_cert_csr="{{ pki_path }}/kube-front-proxy-client-csr.pem"
+service_account_cert_key="{{ pki_path }}/service-account-key.pem"
+service_account_cert_crt="{{ pki_path }}/service-account.pem"
+service_account_cert_csr="{{ pki_path }}/service-account-csr.pem"
+
+[kubernetes_nodes:vars]
+ansible_user=root
+
+local_pki_path={{ playbook_dir }}/pki
+pki_path=/etc/kubernetes/pki
+manifest_path=/etc/kubernetes/manifests
+kube_ca_key="{{ pki_path }}/kube-ca-key.pem"
+kube_ca_crt="{{ pki_path }}/kube-ca.pem"
+kube_ca_csr="{{ pki_path }}/kube-ca-csr.pem"
+etcd_ca_key="{{ pki_path }}/etcd-ca-key.pem"
+etcd_ca_crt="{{ pki_path }}/etcd-ca.pem"
+etcd_ca_csr="{{ pki_path }}/etcd-ca-csr.pem"
+kube_front_proxy_ca_key="{{ pki_path }}/kube-front-proxy-ca-key.pem"
+kube_front_proxy_ca_crt="{{ pki_path }}/kube-front-proxy-ca.pem"
+kube_front_proxy_ca_csr="{{ pki_path }}/kube-front-proxy-ca-csr.pem"
+etcd_health_check_cert_key="{{ pki_path }}/etcd-healthcheck-client-key.pem"
+etcd_health_check_cert_crt="{{ pki_path }}/etcd-healthcheck-client.pem"
+etcd_health_check_cert_csr="{{ pki_path }}/etcd-healthcheck-client-csr.pem"
+apiserver_etcd_client_cert_key="{{ pki_path }}/apiserver-etcd-client-key.pem"
+apiserver_etcd_client_cert_crt="{{ pki_path }}/apiserver-etcd-client.pem"
+apiserver_etcd_client_cert_csr="{{ pki_path }}/apiserver-etcd-client-csr.pem"
+apiserver_cert_key="{{ pki_path }}/kube-api-server-key.pem"
+apiserver_cert_crt="{{ pki_path }}/kube-api-server.pem"
+apiserver_cert_csr="{{ pki_path }}/kube-api-server-csr.pem"
+kubelet_client_cert_key="{{ pki_path }}/apiserver-kubelet-client-key.pem"
+kubelet_client_cert_crt="{{ pki_path }}/apiserver-kubelet-client.pem"
+kubelet_client_cert_csr="{{ pki_path }}/apiserver-kubelet-client-csr.pem"
+controller_manager_cert_key="{{ pki_path }}/kube-controller-manager-key.pem"
+controller_manager_cert_crt="{{ pki_path }}/kube-controller-manager.pem"
+controller_manager_cert_csr="{{ pki_path }}/kube-controller-manager-csr.pem"
+scheduler_cert_key="{{ pki_path }}/kube-scheduler-key.pem"
+scheduler_cert_crt="{{ pki_path }}/kube-scheduler.pem"
+scheduler_cert_csr="{{ pki_path }}/kube-scheduler-csr.pem"
+admin_cert_key="{{ pki_path }}/admin-key.pem"
+admin_cert_crt="{{ pki_path }}/admin.pem"
+admin_cert_csr="{{ pki_path }}/admin-csr.pem"
+kube_front_proxy_client_cert_key="{{ pki_path }}/kube-front-proxy-client-key.pem"
+kube_front_proxy_client_cert_crt="{{ pki_path }}/kube-front-proxy-client.pem"
+kube_front_proxy_client_cert_csr="{{ pki_path }}/kube-front-proxy-client-csr.pem"
+service_account_cert_key="{{ pki_path }}/service-account-key.pem"
+service_account_cert_crt="{{ pki_path }}/service-account.pem"
+service_account_cert_csr="{{ pki_path }}/service-account-csr.pem"
+remote_kubelet_certs_path="/tmp/kubelet-cert"
+ha_home="/etc/kubernetes/ha"
+
+# Manifests arguments
+kubelet_privileged =
+
+apiserver_runtime_config = "--runtime-config=api/all=true"
+apiserver_feature_gates = ""
+apiserver_reconciler_type = "--endpoint-reconciler-type=lease"
+apiserver_enable_bootstrap_token = "--enable-bootstrap-token-auth"
+apiserver_proxy_client_cert_file = "--proxy-client-cert-file=/etc/kubernetes/pki/kube-front-proxy-client.pem"
+apiserver_proxy_client_key_file = "--proxy-client-key-file=/etc/kubernetes/pki/kube-front-proxy-client-key.pem"
+
+controller_manager_bind_address = "--bind-address=127.0.0.1"
