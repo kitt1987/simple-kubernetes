@@ -162,10 +162,10 @@ ha_home="/etc/kubernetes/ha"
 
 # Manifests arguments
 kubelet_privileged = "--allow-privileged"
-kubelet_args =
+kubelet_args = "--feature-gates=CustomPodDNS=true"
 
 apiserver_runtime_config =
-apiserver_feature_gates =
+apiserver_feature_gates = "--feature-gates=DynamicKubeletConfig=true,CustomPodDNS=true"
 apiserver_reconciler_type = "--endpoint-reconciler-type=lease"
 apiserver_enable_bootstrap_token = "--enable-bootstrap-token-auth"
 apiserver_proxy_client_cert_file = "--proxy-client-cert-file=/etc/kubernetes/pki/kube-front-proxy-client.pem"
