@@ -26,6 +26,13 @@
         name: etcd
         tasks_from: generate-cert
 
+- name: Retrieves Keepalived Router ID
+  hosts: master[0]
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: retrieves-routeid
+
 - name: Install manifests
   hosts: nodes
   tasks:

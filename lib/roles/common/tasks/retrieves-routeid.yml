@@ -1,0 +1,11 @@
+- name: Calculate Route ID
+  shell: grep -A 1 KEEPALIVED_ROUTER_ID {{ manifest_path }}/keepalived.yml | grep -oE '[0-9]+'
+  register: keepalived_router_id_out
+
+- name: Set Keepalived Router ID
+  set_fact:
+    keepalived_router_id: "{{ keepalived_router_id_out.stdout }}"
+  delegate_facts: True
+  delegate_to: "{{ item }}"
+  with_inventory_hostnames:
+    - kubernetes_nodes
