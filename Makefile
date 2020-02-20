@@ -8,3 +8,4 @@ default: image
 
 image:
 	docker build --build-arg BUILD=$(TAG) -t $(IMAGE_NAME):$(TAG) .
+	docker tag $(IMAGE_NAME):$(TAG) $(IMAGE_NAME):latest
