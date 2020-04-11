@@ -37,6 +37,13 @@
       name: common
       tasks_from: install-manifest
 
+- name: Wait for Kubernetes resources
+  hosts: master
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: wait-for-k8s-res
+
 - name: Install kubelet
   hosts: master
   tasks:

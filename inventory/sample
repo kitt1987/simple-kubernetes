@@ -68,6 +68,7 @@ cni_plugins_local = {{ playbook_dir }}/releases/cni-plugins-amd64.tgz
 retry_period_in_seconds = 5
 api_server_first_up_retry_cycle = 50
 node_role_setting_retry_cycle = 10
+k8s_res_install_retry_cycle = 600
 
 [localhost]
 localhost

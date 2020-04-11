@@ -5,6 +5,13 @@
       load_image() {
         local image=$1
         local tag=$2
+        if [ "${tag}" != "" ]; then
+          local existed=$(docker images --format '{{.Repository}}:{{.Tag}}' | grep '${tag}')
+          if [ "${existed}" != "" ]; then
+            return
+          fi
+        fi
+
         local loaded_tag=$(docker load -qi ${image} | awk '{ print $3 }')
         if [ "${tag}" != "" ]; then
           docker tag ${loaded_tag} ${tag}

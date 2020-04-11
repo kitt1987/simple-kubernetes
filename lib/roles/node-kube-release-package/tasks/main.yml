@@ -1,6 +1,3 @@
-- name: Upload package
-  include_tasks: ../../kube-release-package/tasks/upload-package.yml
-
 - name: Load images
   shell: |
     {{ image_load_func }}
@@ -13,7 +10,6 @@
   args:
     chdir: "{{ remote_app_path }}"
     executable: /bin/bash
-  register: debug_extracting
-
-- debug:
-    msg: "{{ debug_extracting }}"
+  register: k8s_res
+  async: "{{ k8s_res_install_retry_cycle | int }}"
+  poll: 0

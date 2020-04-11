@@ -4,3 +4,4 @@
 
 - name: Install crictl
   include_tasks: "crictl.yml"
+  when: crictl_remote != ""

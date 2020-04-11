@@ -1,0 +1,4 @@
+/.idea
+/lib/on-prem-cache/
+/lib/releases/cni-plugins-amd64.tgz
+/lib/releases/kubernetes-server-linux-amd64.tar.gz
