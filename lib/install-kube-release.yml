@@ -5,6 +5,13 @@
   vars:
     ansible_connection: local
 
+- name: Upload the Kubernetes release package
+  hosts: kubernetes_nodes
+  tasks:
+  - import_role:
+      name: kube-release-package
+      tasks_from: upload-package
+
 - name: Install Kubernetes release package on master
   hosts: master
   roles:

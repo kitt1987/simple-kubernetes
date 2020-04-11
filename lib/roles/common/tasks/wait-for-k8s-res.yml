@@ -1,0 +1,6 @@
+- name: Wait for Kubernetes resources ready
+  async_status:
+    jid: "{{ k8s_res.ansible_job_id }}"
+  register: k8s_res_result
+  until: k8s_res_result.finished
+  retries: "{{ k8s_res_install_retry_cycle | int }}"

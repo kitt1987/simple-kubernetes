@@ -23,8 +23,13 @@
 
 - name: Clear containers
   shell: |
-    docker rm -f `docker ps -a --format "{{ '{{' }}.Names{{ '}}' }}"  | grep -v simple-kube | awk '{ print $1 }'`
-    crictl rm -f `crictl ps -q`
+    if [[ "$(command -v docker)" != "" ]]; then
+      docker rm -f `docker ps -a --format "{{ '{{' }}.Names{{ '}}' }}"  | grep -v simple-kube | awk '{ print $1 }'`
+    fi
+
+    if [[ "$(command -v crictl)" != "" ]]; then
+      crictl -r unix:///var/run/containerd/containerd.sock rm -f `crictl -r unix:///var/run/containerd/containerd.sock ps -qa`
+    fi
   args:
     executable: /bin/bash
   ignore_errors: yes

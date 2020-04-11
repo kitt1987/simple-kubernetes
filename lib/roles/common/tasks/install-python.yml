@@ -1,6 +1,7 @@
 - name: Detects Python2
   shell: readlink `command -v python` | grep python2
   register: python2
+  ignore_errors: yes
 
 - name: Install Python2 for Ubuntu
   raw: "{{ item }}"
