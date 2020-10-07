@@ -37,9 +37,13 @@
     mkdir -p /root/.kube/
     kubectl completion bash > ~/.kube/completion.bash.inc
     printf "
+    # Get the aliases and functions
+    if [ -f ~/.bashrc ]; then
+          	. ~/.bashrc
+    fi
     # Kubectl shell completion
     source '$HOME/.kube/completion.bash.inc'
-    " >> /root/.bashrc
+    " >> /root/.bash_profile
   args:
     chdir: "{{ remote_app_path }}"
     executable: /bin/bash
