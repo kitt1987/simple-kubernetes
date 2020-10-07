@@ -21,3 +21,33 @@
   register: k8s_res
   async: "{{ k8s_res_install_retry_cycle | int }}"
   poll: 0
+  when: ansible_distribution != 'Ubuntu'
+
+- name: Load images and Install binaries
+  shell: |
+    {{ image_load_func }}
+    [[ ! -d kubernetes/server/bin ]] && tar zxf kubernetes-server-linux-amd64.tar.gz
+    pushd kubernetes/server/bin > /dev/null
+    for tar in *.tar; do
+      load_image ${tar} k8s.gcr.io/`basename -s.tar ${tar}`:{{ kube_release_version }}
+    done
+    cp kubeadm kubectl kubelet /usr/bin
+    popd > /dev/null
+    rm -rf kubernetes
+    mkdir -p /root/.kube/
+    kubectl completion bash > ~/.kube/completion.bash.inc
+    printf "
+    # Get the aliases and functions
+    if [ -f ~/.bashrc ]; then
+          	. ~/.bashrc
+    fi
+    # Kubectl shell completion
+    source '$HOME/.kube/completion.bash.inc'
+    " >> /root/.bash_profile
+  args:
+    chdir: "{{ remote_app_path }}"
+    executable: /bin/bash
+  register: k8s_res
+  async: "{{ k8s_res_install_retry_cycle | int }}"
+  poll: 0
+  when: ansible_distribution == 'Ubuntu'
